@@ -14,6 +14,11 @@ app.use(morgan('dev')); // Use Morgan logging middleware for detailed request lo
 // Routes
 app.use('/api/ads', adsRouter);
 
+// Bet koks nenumatytas route'as grąžins 404
+app.use((req, res) => {
+  res.status(404).json({ error: 'Path not found', path: req.url });
+});
+
 // Server Initialization
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
