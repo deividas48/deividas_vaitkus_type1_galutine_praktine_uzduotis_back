@@ -1,11 +1,13 @@
 /* eslint-disable import/extensions */
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import adsRouter from './routes/adRoutes.js';
+import { PORT } from './config.js';
 
 const app = express(); // Create an Express application instance
-const port = 3000; // Define the port number the server will listen on
+const port = PORT || 5000; // Define the port number the server will listen on
 
 // Middleware
 app.use(cors()); // Enable CORS for all requests, allowing access from different domains.
@@ -20,6 +22,6 @@ app.use((req, res) => {
 });
 
 // Server Initialization
-app.listen(port, () => {
+app.listen(PORT, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
