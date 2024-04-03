@@ -37,3 +37,126 @@ CREATE TABLE kateogrijos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL
 );
+
+-- 'miestai' lentelės duomenų pildymas
+INSERT INTO
+    miestai (name, population, area)
+VALUES
+    ('Orlando', 316.081, 308),
+    ('Salt lake city', 200.567, 285),
+    ('Vilnius', 580.020, 401),
+    ('Kaunas', 300.000, 150),
+    ('Klaipėda', 150.000, 100),
+    ('Washington, D.C.', 705.749, 177),
+    ('Philadelphia', 1584.064, 369),
+    ('Shirebrook', 13.000, 10),
+    ('Švenčionys', 10.000, 5);
+
+-- 'kategorijos' lentelės duomenų pildymas
+INSERT INTO
+    kateogrijos (name)
+VALUES
+    ('Kompiuteriai'),
+    ('Atminties šalinimo prietaisai'),
+    ('Automobiliai'),
+    ('Buitinė technika'),
+    ('Kita');
+
+-- 'vartotojai' lentelės duomenų pildymas
+INSERT INTO
+    vartotojai (name, email, password, avatar_url)
+VALUES
+    (
+        'Jason S',
+        'jason.s@gmail.com',
+        'statham',
+        'https://images.pexels.com/photos/7298423/pexels-photo-7298423.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
+    ),
+    (
+        'Will S',
+        'will.s@gmail.com',
+        'smith',
+        'https://images.pexels.com/photos/4584608/pexels-photo-4584608.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
+    ),
+    (
+        'Ronald Reagan',
+        'ronald.reagan@mail.com',
+        'reagan',
+        'https://images.pexels.com/photos/41008/cowboy-ronald-reagan-cowboy-hat-hat-41008.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
+    ),
+    (
+        'Zbignev J',
+        'zbignevas.jedinskis@yandex.ru',
+        'jedinskis',
+        'https://images.pexels.com/photos/14431137/pexels-photo-14431137.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
+    );
+
+-- 'skelbimai' lentelės duomenų pildymas
+INSERT INTO
+    skelbimai (
+        title,
+        main_image_url,
+        description,
+        price,
+        phone,
+        type,
+        town_id,
+        user_id,
+        category_id
+    )
+VALUES
+    (
+        'Macintosh 128K',
+        'macintosh.png',
+        'Parduodu Macintosh 128K kompiuterį. Kompiuteris naujas. RAM: 128KB, HDD: 20MB, CPU: 8MHz.',
+        2494.99,
+        '+37061234567',
+        'sell',
+        6,
+        3,
+        1
+    ),
+    (
+        'Neuralyzer',
+        'neauralizer.png',
+        'Nuomoju Neuralyzer 1st gen. atminties šalinimo prietaisą. Prietaisas šalina atmintį gerai. Veikia ant žmonių, gyvūnų, bei naujagimių. Vietoje parodysiu kaip naudotis.',
+        3000.00,
+        '+37061234557',
+        'rent',
+        7,
+        2,
+        2
+    ),
+    (
+        '2005 Audi A8 6.0 W12',
+        'a8.png',
+        'Parduodu Audi A8. Automobilis labai geros būklės. Naudojo garbaus amžiaus asmuo iki sodo ir atgal. Nematęs sniego, druskų, tepalo nevalgo. Bagažinėje telpa keturi kūnai. Kaina derinama vietoje.',
+        15000.00,
+        '+37064734567',
+        'sell',
+        8,
+        1,
+        3
+    ),
+    (
+        'Muzikos diskai',
+        'cd.png',
+        'Perku CD su muzika. Tinka lenkiškas ir rusiškas popsas.',
+        4.99,
+        '+37061212567',
+        'buy',
+        9,
+        4,
+        4
+    ),
+    (
+        'SIG SG 550',
+        'gun.jpeg',
+        'Perku SIG SG 550 Counter-Strike: Global Offensive žaidimo atvaizdą.',
+        19.99,
+        '+37064734567',
+        'buy',
+        8,
+        1,
+        5
+    );
