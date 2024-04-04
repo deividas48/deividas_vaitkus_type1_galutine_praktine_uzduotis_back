@@ -5,9 +5,13 @@ import cors from 'cors';
 import morgan from 'morgan';
 import adsRouter from './routes/adRoutes.js';
 import { PORT } from './config.js';
+import testConnection from './helper/msqlTestRouter.js';
 
 const app = express(); // Create an Express application instance
 const port = PORT || 5000; // Define the port number the server will listen on
+
+// testuoti msqlTestRouter.js
+testConnection();
 
 // Middleware
 app.use(cors()); // Enable CORS for all requests, allowing access from different domains.
