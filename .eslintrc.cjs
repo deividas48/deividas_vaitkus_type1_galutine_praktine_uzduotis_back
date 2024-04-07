@@ -22,5 +22,7 @@ module.exports = {
   rules: {
     'no-console': 'off',
     'no-unused-vars': ['off', { argsIgnorePattern: '^_' }],
+    'import/extensions': 'off',
+    'consistent-return': 'off',
   },
 };

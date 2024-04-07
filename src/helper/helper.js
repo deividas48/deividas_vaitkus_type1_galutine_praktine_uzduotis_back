@@ -1,5 +1,5 @@
 import mysql from 'mysql2/promise';
-import { dbConfig } from '../config';
+import { dbConfig } from '../config.js';
 
 // Connect to the database and execute a query
 export default async function dbQueryWithData(sql, argArr) {
