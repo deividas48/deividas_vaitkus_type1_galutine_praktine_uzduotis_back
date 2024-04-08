@@ -16,6 +16,8 @@ testConnection();
 // Middleware
 app.use(cors()); // Enable CORS for all requests, allowing access from different domains.
 app.use(morgan('dev')); // Use Morgan logging middleware for detailed request logging in development mode.
+// Leidžia serveriui priimti JSON tipo duomenis, o taliau juos persiųsti į req.body objektą.
+app.use(express.json()); // Parse JSON-encoded bodies
 
 // Routes
 app.use('/api/ads', adsRouter);

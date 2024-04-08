@@ -24,5 +24,6 @@ module.exports = {
     'no-unused-vars': ['off', { argsIgnorePattern: '^_' }],
     'import/extensions': 'off',
     'consistent-return': 'off',
+    camelcase: 'off',
   },
 };

@@ -3,7 +3,7 @@ import dbQueryWithData from '../helper/helper.js';
 
 const adsRouter = express.Router();
 
-const adsColumns = ['id', 'title', 'description', 'price'];
+const adsColumns = 'title, main_image_url, description, price, phone, type, town_id, user_id, category_id';
 
 // GET /api/ads - grazina visus skelbimus
 adsRouter.get('/', async (_req, res) => {
@@ -46,6 +46,45 @@ adsRouter.get('/:adID', async (req, res) => {
 });
 
 // POST /api/ads - sukuria nauja skelbima
+adsRouter.post('/', async (req, res) => {
+  // Destructure the request body
+  const {
+    title,
+    main_image_url,
+    description,
+    price,
+    phone,
+    type,
+    town_id,
+    user_id,
+    category_id,
+  } = req.body;
+
+  const argArr = [
+    title,
+    main_image_url,
+    description,
+    price,
+    phone,
+    type,
+    town_id,
+    user_id,
+    category_id];
+
+  const sql = `INSERT INTO skelbimai (${adsColumns}) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const [row, error] = await dbQueryWithData(sql, argArr); // gauti duomenys is DB.
+
+  // If there is an error, return it
+  if (error) {
+    console.warn('post rows error ===', error);
+    console.warn('error ===', error.message);
+    return res.status(400).json({ error: 'something went wrong' });
+  }
+  // Return the created ad by filling columns
+  res.json({ id: row.insertId, ...req.body });
+});
+
 // DELETE /api/ads/:id - istrina skelbima (is_published = false)
+
 
 export default adsRouter;
