@@ -11,7 +11,7 @@ CREATE TABLE skelbimai (
     user_id INT NOT NULL,
     category_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    is_published BOOLEAN NOT NULL DEFAULT FALSE
+    is_published BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 -- Miestai lentelė
