@@ -85,6 +85,51 @@ adsRouter.post('/', async (req, res) => {
 });
 
 // DELETE /api/ads/:id - istrina skelbima (is_published = false)
+adsRouter.delete('/:adID', async (req, res) => {
+  // Extracting adID from the route parameters
+  const adId = req.params.adID;
+  const currentBody = req.body;
+  // Use the dbQueryWithData function to get the data
+  const sql1 = 'SELECT * FROM skelbimai WHERE id = ?';
+  const [row1, error1] = await dbQueryWithData(sql1, [adId]); // gauti duomenys is DB.
+  // If there is an error, return it
+  if (error1) {
+    console.log('error1 ===', error1);
+    return res.status(500).json('cannot access');
+  }
+  console.log('row1 ===', row1);
+  const adUserId = row1[0].user_id;
 
+  // Grąžins 404, jei nėra įrašo su tokiu ID
+  if (row1.length === 0) {
+    console.log('row does not exist');
+    return res.status(404).json({ error: 'row does not exist' });
+  }
+
+  // jei vartotojas nėra skelbimo savininkas, grąžina 401
+  // console.log('Prisijungusio vartotojo ID: ', req.body.userId.toString());
+  // Prisijungusio vartotojo ID
+  // console.log('Skelbimo savininko ID:', adUserId); // Skelbimo savininko ID
+  // if (currentBody.userId !== adUserId) {
+  //   return res.status(401).json({ error: 'only owner can delete' });
+  // }
+
+  const sql2 = 'UPDATE skelbimai SET is_published=0 WHERE id=? LIMIT 1';
+
+  const [row2, error2] = await dbQueryWithData(sql2, [adId]);
+
+  if (error2) {
+    console.warn('ištrinamas įrašas pakeičiant is_published į 0 ===', error2);
+    console.warn('error ===', error2.message);
+    return res.status(400).json({ error: 'something went wrong' });
+  }
+
+  // if (row2.affectedRows === 0) {
+  //   console.log('no rows');
+  //   return res.status(404).json({ error: `ap with id: '${adId}' was not found` });
+  // }
+
+  res.json({ msg: `ad with id '${adId}' was deleted` });
+});
 
 export default adsRouter;

@@ -26,3 +26,6 @@ Content-Type: application/json
     "user_id": 1,
     "category_id": 1
 }
+
+### Delete single Ap
+DELETE  http://localhost:3000/api/ads/6
