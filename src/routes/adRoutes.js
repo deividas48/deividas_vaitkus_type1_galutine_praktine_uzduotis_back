@@ -12,7 +12,7 @@ adsRouter.get('/', async (_req, res) => {
   const [row, error] = await dbQueryWithData(sql); // gauti duomenys is DB.
   // If there is an error, return it
   if (error) {
-    console.warn('get all trips error ===', error);
+    console.warn('get all ads error ===', error);
     console.warn('error ===', error.message);
     return res.status(400).json({ error: 'something went wrong' });
   }

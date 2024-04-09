@@ -27,5 +27,29 @@ Content-Type: application/json
     "category_id": 1
 }
 
-### Delete single Ap
+### Delete single Ad
 DELETE  http://localhost:3000/api/ads/6
+
+
+### Get all towns
+
+GET http://localhost:3000/api/towns
+
+### Get single town
+GET http://localhost:3000/api/towns/1
+
+### Get undefined path
+GET http://localhost:3000/api/towns/99
+
+### Create town
+POST http://localhost:3000/api/towns
+Content-Type: application/json
+
+{
+    "name": "Test 3",
+    "population": 88888,
+    "area": 9999
+}
+
+### Delete single town
+DELETE  http://localhost:3000/api/towns/10

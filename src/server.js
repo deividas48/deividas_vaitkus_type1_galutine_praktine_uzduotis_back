@@ -4,6 +4,7 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import adsRouter from './routes/adRoutes.js';
+import townsRouter from './routes/townRoutes.js';
 import { PORT } from './config.js';
 import testConnection from './helper/msqlTestRouter.js';
 
@@ -21,6 +22,7 @@ app.use(express.json()); // Parse JSON-encoded bodies
 
 // Routes
 app.use('/api/ads', adsRouter);
+app.use('/api/towns', townsRouter);
 
 // Bet koks nenumatytas route'as grąžins 404
 app.use((req, res) => {
