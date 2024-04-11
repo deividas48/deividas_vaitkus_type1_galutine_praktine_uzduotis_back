@@ -3,7 +3,7 @@ import dbQueryWithData from '../helper/helper.js';
 
 const adsRouter = express.Router();
 
-const adsColumns = 'title, main_image_url, description, price, phone, type, town_id, user_id, category_id';
+const adsColumns = 'id, title, main_image_url, description, price, phone, type, town_id, user_id, category_id';
 
 // GET /api/ads - grazina visus skelbimus
 adsRouter.get('/', async (_req, res) => {
@@ -49,6 +49,7 @@ adsRouter.get('/:adID', async (req, res) => {
 adsRouter.post('/', async (req, res) => {
   // Destructure the request body
   const {
+    id,
     title,
     main_image_url,
     description,
@@ -61,6 +62,7 @@ adsRouter.post('/', async (req, res) => {
   } = req.body;
 
   const argArr = [
+    id,
     title,
     main_image_url,
     description,
@@ -71,7 +73,7 @@ adsRouter.post('/', async (req, res) => {
     user_id,
     category_id];
 
-  const sql = `INSERT INTO skelbimai (${adsColumns}) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const sql = `INSERT INTO skelbimai (${adsColumns}) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   const [row, error] = await dbQueryWithData(sql, argArr); // gauti duomenys is DB.
 
   // If there is an error, return it
