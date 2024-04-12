@@ -57,7 +57,7 @@ INSERT INTO
     kateogrijos (name)
 VALUES
     ('Kompiuteriai'),
-    ('Atminties šalinimo prietaisai'),
+    ('Laisvalaikio prekės'),
     ('Automobiliai'),
     ('Buitinė technika'),
     ('Kita');
