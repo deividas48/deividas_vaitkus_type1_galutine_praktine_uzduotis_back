@@ -6,7 +6,7 @@ const categoriesRouter = express.Router();
 // GET /api/categories - grazina visus kategorijas
 categoriesRouter.get('/', async (_req, res) => {
   // Use the dbQueryWithData function to get the data
-  const sql = 'SELECT name FROM kateogrijos';
+  const sql = 'SELECT * FROM kateogrijos';
   const [row, error] = await dbQueryWithData(sql); // gauti duomenys iš DB.
   // If there is an error, return it
   if (error) {
