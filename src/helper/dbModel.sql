@@ -130,7 +130,7 @@ VALUES
     (
         '2005 Audi A8 6.0 W12',
         'a8.png',
-        'Parduodu Audi A8. Automobilis labai geros būklės. Naudojo garbaus amžiaus asmuo iki sodo ir atgal. Nematęs sniego, druskų, tepalo nevalgo. Bagažinėje telpa keturi kūnai. Kaina derinama vietoje.',
+        'Parduodu Audi A8. Automobilis labai geros būklės. Naudojo garbaus amžiaus asmuo iki sodo ir atgal. Nematęs sniego, druskų, tepalo nevalgo. Kaina derinama vietoje.',
         15000.00,
         '+37064734567',
         'sell',
