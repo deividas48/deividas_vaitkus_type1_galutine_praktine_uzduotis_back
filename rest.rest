@@ -1,0 +1,58 @@
+### Get all Ads
+
+GET http://localhost:3000/api/ads
+
+### Get undefined path
+GET http://localhost:3000/api/undefined
+
+### Get single Ad
+GET http://localhost:3000/api/ads/1
+
+### Get undefined path
+GET http://localhost:3000/api/ads/99
+
+### Create Ad
+POST http://localhost:3000/api/ads
+Content-Type: application/json
+
+{
+    "title": "Test 3",
+    "main_image_url": "https://www.google.com",
+    "description": "Test 3",
+    "price": 100,
+    "phone": "123456789",
+    "type": "sell",
+    "town_id": 1,
+    "user_id": 1,
+    "category_id": 1
+}
+
+### Delete single Ad
+DELETE  http://localhost:3000/api/ads/6
+
+
+### Get all towns
+
+GET http://localhost:3000/api/towns
+
+### Get single town
+GET http://localhost:3000/api/towns/1
+
+### Get undefined path
+GET http://localhost:3000/api/towns/99
+
+### Create town
+POST http://localhost:3000/api/towns
+Content-Type: application/json
+
+{
+    "name": "Test 3",
+    "population": 88888,
+    "area": 9999
+}
+
+### Delete single town
+DELETE  http://localhost:3000/api/towns/10
+
+### Get all categories
+GET http://localhost:3000/api/categories
