@@ -160,3 +160,13 @@ VALUES
         1,
         5
     );
+
+-- 'skelbimai' lentelės duomenų pildymas
+ALTER TABLE
+    skelbimai
+ADD
+    COLUMN main_image_url_1 VARCHAR(1000),
+ADD
+    COLUMN main_image_url_2 VARCHAR(1000),
+ADD
+    COLUMN main_image_url_3 VARCHAR(1000)
