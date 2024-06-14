@@ -8,7 +8,7 @@ const adsColumns = 'id, title, main_image_url, description, price, phone, type, 
 // GET /api/ads - grazina visus skelbimus
 adsRouter.get('/', async (_req, res) => {
   // Use the dbQueryWithData function to get the data
-  const sql = 'SELECT skelbimai.id, skelbimai.title, skelbimai.main_image_url, skelbimai.description, skelbimai.price, skelbimai.phone, skelbimai.type, skelbimai.town_id, skelbimai.user_id, skelbimai.category_id, skelbimai.is_published, skelbimai.main_image_url_1, skelbimai.main_image_url_2, skelbimai.main_image_url_3 FROM skelbimai';
+  const sql = `SELECT skelbimai.id, skelbimai.title, skelbimai.main_image_url, skelbimai.description, skelbimai.price, skelbimai.phone, skelbimai.type, skelbimai.town_id, skelbimai.user_id, skelbimai.category_id, skelbimai.is_published, skelbimai.main_image_url_1, skelbimai.main_image_url_2, skelbimai.main_image_url_3 FROM skelbimai`;
   const [row, error] = await dbQueryWithData(sql); // gauti duomenys is DB.
   // If there is an error, return it
   if (error) {

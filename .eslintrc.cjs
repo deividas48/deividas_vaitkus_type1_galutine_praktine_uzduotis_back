@@ -25,5 +25,7 @@ module.exports = {
     'import/extensions': 'off',
     'consistent-return': 'off',
     camelcase: 'off',
+    quotes: 'off',
+    'linebreak-style': 'off',
   },
 };
