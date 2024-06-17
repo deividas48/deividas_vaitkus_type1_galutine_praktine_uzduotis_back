@@ -3,53 +3,66 @@ import dbQueryWithData from '../helper/helper.js';
 
 const adsRouter = express.Router();
 
-const adsColumns = 'id, title, main_image_url, description, price, phone, type, town_id, user_id, category_id, is_published, main_image_url_1, main_image_url_2, main_image_url_3';
+const adsColumns = 'title, main_image_url, description, price, phone, type, town_id, user_id, category_id, is_published, main_image_url_1, main_image_url_2, main_image_url_3';
 
-// GET /api/ads - grazina visus skelbimus
+// GET /api/ads - returns all ads
+// #1_Get - Use the dbQueryWithData function to get the data
 adsRouter.get('/', async (_req, res) => {
-  // Use the dbQueryWithData function to get the data
-  const sql = `SELECT skelbimai.id, skelbimai.title, skelbimai.main_image_url, skelbimai.description, skelbimai.price, skelbimai.phone, skelbimai.type, skelbimai.town_id, skelbimai.user_id, skelbimai.category_id, skelbimai.is_published, skelbimai.main_image_url_1, skelbimai.main_image_url_2, skelbimai.main_image_url_3 FROM skelbimai`;
-  const [row, error] = await dbQueryWithData(sql); // gauti duomenys is DB.
-  // If there is an error, return it
+  const sql = `SELECT skelbimai.id AS skelbimai_id, skelbimai.title AS skelbimai_title, skelbimai.main_image_url AS skelbimai_main_image_url, skelbimai.description AS skelbimai_description, skelbimai.price AS skelbimai_price, skelbimai.phone AS skelbimai_phone, skelbimai.type AS skelbimai_type, skelbimai.town_id AS skelbimai_town_id, skelbimai.user_id AS skelbimai_user_id, skelbimai.category_id AS skelbimai_category_id, skelbimai.is_published AS skelbimai_is_published, skelbimai.main_image_url_1 AS skelbimai_main_image_url_1, skelbimai.main_image_url_2 AS skelbimai_main_image_url_2, skelbimai.main_image_url_3 AS skelbimai_main_image_url_3, miestai.name AS town_name, kateogrijos.name AS category_name 
+  FROM skelbimai
+  LEFT JOIN miestai
+  ON skelbimai.town_id = miestai.id
+  LEFT JOIN kateogrijos
+  ON skelbimai.category_id = kateogrijos.id
+  GROUP BY skelbimai.id`;
+  // #1.1_Get - Get data from DB.
+  const [row, error] = await dbQueryWithData(sql);
+  // #1.2_Get - If there is an error, return it
   if (error) {
     console.warn('get all ads error ===', error);
     console.warn('error ===', error.message);
-    return res.status(400).json({ error: 'something went wrong' });
+    return res.status(400).json({ error: error.message });
   }
+  // #Additional_Get - print out the first row just to see what the data looks like.
   console.log('row ===', row[0]);
-  // Return all ads in a form of object
+  // #1.3_Get - Return all ads as an object
   res.json(row);
 });
 
-// GET /api/ads/:id - grazina viena skelbima
+// GET /api/ads/:id - returns a single ad
+// #1_Get - Extracting adID from the route parameters (page link parameter)
 adsRouter.get('/:adID', async (req, res) => {
-  // Extracting adID from the route parameters
+  // #1.1_Get - req.params.adID - parameter (/parameter).
   const adId = req.params.adID;
-  // Use the dbQueryWithData function to get the data
+  // #1.2_Get - before dbQueryWithData function, create a SQL query to get a single ad by ID.
   const sql = `SELECT ${adsColumns} FROM skelbimai WHERE is_published = 1 AND id = ?`;
-  const [row, error] = await dbQueryWithData(sql, [adId]); // gauti duomenys is DB.
-  // If there is an error, return it
+  // #1.3_Get - Use the dbQueryWithData function to get the data from the database.
+  const [row, error] = await dbQueryWithData(sql, [adId]); // Get data from DB.
+  // #1.4_Get - If there is an error by getting data, return it.
   if (error) {
     console.warn('get one row error ===', error);
     console.warn('error ===', error.message);
-    return res.status(400).json({ error: 'something went wrong' });
+    return res.status(400).json({ error: error.message });
   }
 
-  // Grąžins 404, jei nėra įrašo su tokiu ID
+  // #1.5_Get - Return 404 if no record with the given ID
   if (row.length === 0) {
     console.log('row does not exist');
     return res.status(404).json({ error: 'row does not exist' });
   }
 
-  // Return the found ad
+  // #1.6_Get - Return the ad (skelbimą) as an object. This is the response to the client.
   res.json(row);
 });
 
-// POST /api/ads - sukuria nauja skelbima
+// POST - creates a new ad
+// #1_Post - create a post request to the /api/ads route
 adsRouter.post('/', async (req, res) => {
-  // Destructure the request body
+  // #1.1_Post - Destructure the request body.
+  // 'req.body' - is the data that is sent to the server from the client (frontend).
   const {
-    id,
+    // id is not needed, because it is autoincremented in the DB itself.
+    // The variable names below are the same as the names of the columns in the database.
     title,
     main_image_url,
     description,
@@ -59,16 +72,24 @@ adsRouter.post('/', async (req, res) => {
     town_id,
     user_id,
     category_id,
-    is_published,
+    is_published = 1,
     main_image_url_1,
     main_image_url_2,
     main_image_url_3,
   } = req.body;
 
+  // #1.2_Post - Ensure required fields are present
+  if (!title || !description || !price || !phone || !type || !town_id || !category_id) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  // #1.3_Post - Create an array of arguments to pass to the query. The order of the arguments
+  // must match the order of the columns in the query below.
+  // Variable names in the array below must match the variable names above (req.body object).
   const argArr = [
-    id,
     title,
-    main_image_url,
+    main_image_url || null, // null - ensure main_image_url is not undefined,
+    // if it is, set it to null
     description,
     price,
     phone,
@@ -77,28 +98,37 @@ adsRouter.post('/', async (req, res) => {
     user_id,
     category_id,
     is_published,
-    main_image_url_1,
-    main_image_url_2,
-    main_image_url_3,
+    main_image_url_1 || null, // null - ...
+    main_image_url_2 || null, // null - ...
+    main_image_url_3 || null, // null - ...
   ];
 
-  const sql = `INSERT INTO skelbimai (${adsColumns}) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-  const [row, error] = await dbQueryWithData(sql, argArr); // gauti duomenys is DB.
+  // #1.4_Post - Create a SQL query to insert a new row into the database
+  const sql = `INSERT INTO skelbimai (${adsColumns}) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  // #1.5_Post - Use the dbQueryWithData function to execute the query
+  const [row, error] = await dbQueryWithData(sql, argArr); // Make a query to the database.
+  // 'sql' - SQL query.
+  // The 'argArr' array is populated with the values from the request body (req.body)
 
-  // If there is an error, return it
+  // #1.6_Post - If there is an error, return it
   if (error) {
     console.warn('post rows error ===', error);
     console.warn('error ===', error.message);
-    return res.status(400).json({ error: 'something went wrong' });
+    return res.status(400).json({ error: error.message }); // Show informative error message
   }
   // Return the created ad by filling columns
+  // #1.7_Post - Return the created ad
   res.json({ id: row.insertId, ...req.body });
+  // columns. 'res.json' - send the response to the client. The id
+  //  is autoincremented, ...req.body - the rest of the data from frontend.
 });
 
 // DELETE /api/ads/:id - istrina skelbima (is_published = false)
+// #1_Delete - Use the dbQueryWithData function to get the data
 adsRouter.delete('/:adID', async (req, res) => {
-  // Extracting adID from the route parameters
+  // #1.1_Delete - Extracting adID from the route parameters (page link parameter)
   const adId = req.params.adID;
+  // Need?
   const currentBody = req.body;
   // Use the dbQueryWithData function to get the data
   const sql1 = 'SELECT * FROM skelbimai WHERE id = ?';
