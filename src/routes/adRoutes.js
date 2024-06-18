@@ -95,6 +95,7 @@ adsRouter.post('/', async (req, res) => {
   // must match the order of the columns in the query below.
   // Variable names in the array below must match the variable names above (req.body object).
   const argArr = [
+    // id, // id is autoincremented, so we don't need to pass it
     title,
     main_image_url || null, // null - ensure main_image_url is not undefined,
     // if it is, set it to null

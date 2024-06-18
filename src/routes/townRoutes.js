@@ -49,17 +49,18 @@ townsRouter.get('/:townID', async (req, res) => {
 townsRouter.post('/', async (req, res) => {
   // Destructure the request body
   const {
-    // id,
+    // id, // id is autoincremented, so we don't need to pass it
     name,
-    population,
-    area,
+    population = 0, // Ensure population is set to a default value if undefined
+    area = 0, // Ensure population is set to a default value if undefined
   } = req.body;
 
   const argArr = [
     // id,
     name,
-    population,
-    area];
+    population, // Now population has a default value of 0
+    area, // Now area has a default value of 0
+  ];
 
   const sql = `INSERT INTO miestai (${townsColumns}) VALUES (?, ?, ?)`;
   const [row, error] = await dbQueryWithData(sql, argArr); // gauti duomenys is DB.
@@ -68,7 +69,7 @@ townsRouter.post('/', async (req, res) => {
   if (error) {
     console.warn('post rows error ===', error);
     console.warn('error ===', error.message);
-    return res.status(400).json({ error: 'something went wrong' });
+    return res.status(400).json(error.message);
   }
   // Return the created town by filling columns
   res.json({ id: row.insertId, ...req.body });
