@@ -3,7 +3,7 @@ import dbQueryWithData from '../helper/helper.js';
 
 const townsRouter = express.Router();
 
-const townsColumns = 'id, name, population, area';
+const townsColumns = 'name, population, area';
 
 // GET /api/towns - grazina visus skelbimus
 townsRouter.get('/', async (_req, res) => {
@@ -49,19 +49,19 @@ townsRouter.get('/:townID', async (req, res) => {
 townsRouter.post('/', async (req, res) => {
   // Destructure the request body
   const {
-    id,
+    // id,
     name,
     population,
     area,
   } = req.body;
 
   const argArr = [
-    id,
+    // id,
     name,
     population,
     area];
 
-  const sql = `INSERT INTO miestai (${townsColumns}) VALUES (?, ?, ?, ?)`;
+  const sql = `INSERT INTO miestai (${townsColumns}) VALUES (?, ?, ?)`;
   const [row, error] = await dbQueryWithData(sql, argArr); // gauti duomenys is DB.
 
   // If there is an error, return it
