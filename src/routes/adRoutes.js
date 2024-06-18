@@ -79,7 +79,15 @@ adsRouter.post('/', async (req, res) => {
   } = req.body;
 
   // #1.2_Post. Ensure required fields are present
-  if (!title || !description || !price || !phone || !type || !town_id || !category_id) {
+  if (
+    !title
+    || !description
+    || !price
+    || !phone
+    || !type
+    || !town_id
+    || !category_id
+  ) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
@@ -94,8 +102,8 @@ adsRouter.post('/', async (req, res) => {
     price,
     phone,
     type,
-    town_id,
-    user_id,
+    town_id || null, // null - ...
+    user_id || null, // null - ...
     category_id,
     is_published,
     main_image_url_1 || null, // null - ...
