@@ -141,7 +141,7 @@ adsRouter.delete('/:adID', async (req, res) => {
   const currentBody = req.body;
   // Use the dbQueryWithData function to get the data
   // #1.2_Delete. Create a SQL query to get a single ad by ID.
-  const sql1 = 'SELECT * FROM skelbimai WHERE id = ?';
+  const sql1 = `SELECT * FROM skelbimai WHERE id = ?`;
   // #1.3_Delete. Use the dbQueryWithData function to get the data from the database.
   const [row1, error1] = await dbQueryWithData(sql1, [adId]); // Get data from DB.
   // #1.4_Delete. If there is an error by getting data, return it.
