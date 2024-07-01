@@ -6,17 +6,36 @@ const adsRouter = express.Router();
 const adsColumns = 'title, main_image_url, description, price, phone, type, town_id, user_id, category_id, is_published, main_image_url_1, main_image_url_2, main_image_url_3';
 
 // #get_ads. GET /api/ads - returns all ads or ads filtered by category
-adsRouter.get('/', async (_req, res) => {
+adsRouter.get('/', async (req, res) => {
+  // 1. #category_filter. Extract the category query parameter from the request
+  const { category } = req.query; // This means the request
+  // sent from the front-end in this case query parameters is sent (the link ending)
+
   // 1. #get_ads. Create the base SQL query
-  const sql = `SELECT skelbimai.id AS skelbimai_id, skelbimai.title AS skelbimai_title, skelbimai.main_image_url AS skelbimai_main_image_url, skelbimai.description AS skelbimai_description, skelbimai.price AS skelbimai_price, skelbimai.phone AS skelbimai_phone, skelbimai.type AS skelbimai_type, skelbimai.town_id AS skelbimai_town_id, skelbimai.user_id AS skelbimai_user_id, skelbimai.category_id AS skelbimai_category_id, skelbimai.is_published AS skelbimai_is_published, skelbimai.main_image_url_1 AS skelbimai_main_image_url_1, skelbimai.main_image_url_2 AS skelbimai_main_image_url_2, skelbimai.main_image_url_3 AS skelbimai_main_image_url_3, miestai.name AS town_name, kateogrijos.name AS category_name 
+  let sql = `SELECT skelbimai.id AS skelbimai_id, skelbimai.title AS skelbimai_title, skelbimai.main_image_url AS skelbimai_main_image_url, skelbimai.description AS skelbimai_description, skelbimai.price AS skelbimai_price, skelbimai.phone AS skelbimai_phone, skelbimai.type AS skelbimai_type, skelbimai.town_id AS skelbimai_town_id, skelbimai.user_id AS skelbimai_user_id, skelbimai.category_id AS skelbimai_category_id, skelbimai.is_published AS skelbimai_is_published, skelbimai.main_image_url_1 AS skelbimai_main_image_url_1, skelbimai.main_image_url_2 AS skelbimai_main_image_url_2, skelbimai.main_image_url_3 AS skelbimai_main_image_url_3, miestai.name AS town_name, kateogrijos.name AS category_name 
   FROM skelbimai
   LEFT JOIN miestai
   ON skelbimai.town_id = miestai.id
   LEFT JOIN kateogrijos
-  ON skelbimai.category_id = kateogrijos.id
-  GROUP BY skelbimai.id`;
-  // 3. #get_ads. Use dbQueryWithData function to execute the query, i.e. get data from DB
-  const [row, error] = await dbQueryWithData(sql);
+  ON skelbimai.category_id = kateogrijos.id`;
+
+  // 2. #category_filter. Initialize an array to hold query parameters
+  const params = []; // Parameter - link ending for the filters
+
+  // 3. #category_filter. Check if category parameter is present
+  if (category) {
+    // 3.1. #category_filter. Append a WHERE clause to filter ads by category_id
+    sql += ' WHERE skelbimai.category_id = ?';
+    // 3.2. #category_filter. Add the category parameter to the params array
+    params.push(category);
+  }
+
+  // 2. #get_ads. Groups ads by skelbimai.id. The symbol '+=' appends it to the sql query
+  sql += ' GROUP BY skelbimai.id';
+
+  // 3. #get_ads. Use dbQueryWithData function to execute the query
+  // with params, i.e. get data from DB
+  const [rows, error] = await dbQueryWithData(sql, params);
   // 7. #get_ads. If there is an error, log it and return a 400 status with the error message
   if (error) {
     console.warn('get all ads error ===', error);
@@ -24,10 +43,10 @@ adsRouter.get('/', async (_req, res) => {
     return res.status(400).json({ error: error.message });
   }
   // 8. #get_ads. Print out (log) the first row just to see what the data looks like.
-  console.log('row ===', row[0]);
+  console.log('row ===', rows[0]);
 
   // 9. #get_ads. Return all the ads as an array of objects
-  res.json(row);
+  res.json(rows);
 });
 
 // GET /api/ads/:id - returns a single ad

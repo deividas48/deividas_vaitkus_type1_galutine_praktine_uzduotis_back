@@ -56,3 +56,6 @@ DELETE  http://localhost:3000/api/towns/10
 
 ### Get all categories
 GET http://localhost:3000/api/categories
+
+### Get ads by category ID
+GET http://localhost:3000/api/ads?category=1
