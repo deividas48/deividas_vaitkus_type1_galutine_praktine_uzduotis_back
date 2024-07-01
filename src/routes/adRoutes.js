@@ -5,9 +5,9 @@ const adsRouter = express.Router();
 
 const adsColumns = 'title, main_image_url, description, price, phone, type, town_id, user_id, category_id, is_published, main_image_url_1, main_image_url_2, main_image_url_3';
 
-// GET /api/ads - returns all ads
-// #1_Get. Use the dbQueryWithData function to get the data
+// #get_ads. GET /api/ads - returns all ads or ads filtered by category
 adsRouter.get('/', async (_req, res) => {
+  // 1. #get_ads. Create the base SQL query
   const sql = `SELECT skelbimai.id AS skelbimai_id, skelbimai.title AS skelbimai_title, skelbimai.main_image_url AS skelbimai_main_image_url, skelbimai.description AS skelbimai_description, skelbimai.price AS skelbimai_price, skelbimai.phone AS skelbimai_phone, skelbimai.type AS skelbimai_type, skelbimai.town_id AS skelbimai_town_id, skelbimai.user_id AS skelbimai_user_id, skelbimai.category_id AS skelbimai_category_id, skelbimai.is_published AS skelbimai_is_published, skelbimai.main_image_url_1 AS skelbimai_main_image_url_1, skelbimai.main_image_url_2 AS skelbimai_main_image_url_2, skelbimai.main_image_url_3 AS skelbimai_main_image_url_3, miestai.name AS town_name, kateogrijos.name AS category_name 
   FROM skelbimai
   LEFT JOIN miestai
@@ -15,17 +15,18 @@ adsRouter.get('/', async (_req, res) => {
   LEFT JOIN kateogrijos
   ON skelbimai.category_id = kateogrijos.id
   GROUP BY skelbimai.id`;
-  // #1.1_Get. Get data from DB.
+  // 3. #get_ads. Use dbQueryWithData function to execute the query, i.e. get data from DB
   const [row, error] = await dbQueryWithData(sql);
-  // #1.2_Get. If there is an error, return it
+  // 7. #get_ads. If there is an error, log it and return a 400 status with the error message
   if (error) {
     console.warn('get all ads error ===', error);
     console.warn('error ===', error.message);
     return res.status(400).json({ error: error.message });
   }
-  // #Additional_Get. Print out the first row just to see what the data looks like.
+  // 8. #get_ads. Print out (log) the first row just to see what the data looks like.
   console.log('row ===', row[0]);
-  // #1.3_Get. Return all ads as an object
+
+  // 9. #get_ads. Return all the ads as an array of objects
   res.json(row);
 });
 
