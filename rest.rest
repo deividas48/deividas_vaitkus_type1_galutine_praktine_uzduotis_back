@@ -1,18 +1,18 @@
-### Get all Ads
+### Get all listings
 
-GET http://localhost:3000/api/ads
+GET http://localhost:3000/api/listings
 
 ### Get undefined path
 GET http://localhost:3000/api/undefined
 
-### Get single Ad
-GET http://localhost:3000/api/ads/1
+### Get single Listing
+GET http://localhost:3000/api/listings/1
 
 ### Get undefined path
-GET http://localhost:3000/api/ads/99
+GET http://localhost:3000/api/listings/99
 
-### Create Ad
-POST http://localhost:3000/api/ads
+### Create Listing
+POST http://localhost:3000/api/listings
 Content-Type: application/json
 
 {
@@ -27,8 +27,8 @@ Content-Type: application/json
     "category_id": 1
 }
 
-### Delete single Ad
-DELETE  http://localhost:3000/api/ads/6
+### Delete single Listing
+DELETE  http://localhost:3000/api/listings/6
 
 
 ### Get all towns
@@ -57,5 +57,5 @@ DELETE  http://localhost:3000/api/towns/10
 ### Get all categories
 GET http://localhost:3000/api/categories
 
-### Get ads by category ID
-GET http://localhost:3000/api/ads?category=1
+### Get listings by category ID
+GET http://localhost:3000/api/listings?category=1

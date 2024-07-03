@@ -3,7 +3,7 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import adsRouter from './routes/adRoutes.js';
+import listingsRouter from './routes/listingRoutes.js';
 import townsRouter from './routes/townRoutes.js';
 import categoriesRouter from './routes/categoryRoutes.js';
 import { PORT } from './config.js';
@@ -22,7 +22,7 @@ app.use(morgan('dev')); // Log all requests to the console.
 app.use(express.json()); // Parse JSON-encoded bodies
 
 // Routes
-app.use('/api/ads', adsRouter);
+app.use('/api/listings', listingsRouter);
 app.use('/api/towns', townsRouter);
 app.use('/api/categories', categoriesRouter);
 
