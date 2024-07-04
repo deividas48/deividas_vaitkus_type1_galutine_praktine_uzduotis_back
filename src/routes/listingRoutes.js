@@ -53,7 +53,7 @@ listingsRouter.get('/', async (req, res) => {
 // #1_Get. Extracting listingID from the route parameters (page link parameter)
 listingsRouter.get('/:listingID', async (req, res) => {
   // #1.1_Get. 'req.params.listingID' - parameter (/parameter).
-  const listingID = req.params.listingID;
+  const { listingID } = req.params;
   // #1.2_Get. Before dbQueryWithData function, create a SQL query to get a single listing by ID.
   const sql = `SELECT ${listingsColumns} FROM skelbimai WHERE is_published = 1 AND id = ?`;
   // #1.3_Get. Use the dbQueryWithData function to get the data from the database.
@@ -156,7 +156,7 @@ listingsRouter.post('/', async (req, res) => {
 // #1_Delete. Use the dbQueryWithData function to get the data
 listingsRouter.delete('/:listingID', async (req, res) => {
   // #1.1_Delete. Extracting listingID from the route parameters (page link parameter)
-  const listingID = req.params.listingID;
+  const { listingID } = req.params;
   // Need?
   const currentBody = req.body;
   // Use the dbQueryWithData function to get the data
