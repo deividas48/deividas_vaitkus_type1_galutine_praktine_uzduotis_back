@@ -46,13 +46,37 @@ POST http://localhost:3000/api/towns
 Content-Type: application/json
 
 {
-    "name": "Test 3",
+    "name": "Test 4",
     "population": 88888,
     "area": 9999
 }
 
 ### Delete single town
 DELETE  http://localhost:3000/api/towns/10
+
+### Get all users
+
+GET http://localhost:3000/api/users
+
+### Get single user
+GET http://localhost:3000/api/users/1
+
+### Get undefined path
+GET http://localhost:3000/api/users/99
+
+### Create user
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+    "name": "Jonas",
+    "email": "test1",
+    "password": "test1",
+    "avatar_url": "test1"
+}
+
+### Delete single user
+DELETE  http://localhost:3000/api/users/10
 
 ### Get all categories
 GET http://localhost:3000/api/categories

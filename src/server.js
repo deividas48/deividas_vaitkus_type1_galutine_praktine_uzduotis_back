@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import listingsRouter from './routes/listingRoutes.js';
 import townsRouter from './routes/townRoutes.js';
 import categoriesRouter from './routes/categoryRoutes.js';
+import userRouter from './routes/userRoutes.js';
 import { PORT } from './config.js';
 import testConnection from './helper/msqlTestRouter.js';
 
@@ -25,6 +26,7 @@ app.use(express.json()); // Parse JSON-encoded bodies
 app.use('/api/listings', listingsRouter);
 app.use('/api/towns', townsRouter);
 app.use('/api/categories', categoriesRouter);
+app.use('/api/users', userRouter);
 
 // Bet koks nenumatytas route'as grąžins 404
 app.use((req, res) => {
