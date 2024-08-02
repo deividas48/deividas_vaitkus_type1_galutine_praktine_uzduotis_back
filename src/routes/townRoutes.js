@@ -1,3 +1,5 @@
+// townRoutes.js
+
 import express from 'express';
 import dbQueryWithData from '../helper/helper.js';
 
@@ -62,7 +64,7 @@ townsRouter.post('/', async (req, res) => {
     area, // Now area has a default value of 0
   ];
 
-  const sql = `INSERT INTO miestai (${townsColumns}) VALUES (?, ?, ?, ?)`;
+  const sql = `INSERT INTO miestai (name, population, area) VALUES (?, ?, ?)`;
   const [row, error] = await dbQueryWithData(sql, argArr); // gauti duomenys is DB.
 
   // If there is an error, return it
