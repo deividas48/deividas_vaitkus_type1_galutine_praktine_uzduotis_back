@@ -7,6 +7,7 @@ import listingsRouter from './routes/listingRoutes.js';
 import townsRouter from './routes/townRoutes.js';
 import categoriesRouter from './routes/categoryRoutes.js';
 import userRouter from './routes/userRoutes.js';
+import authRouter from './routes/authRoutes.js';
 import { PORT } from './config.js';
 import testConnection from './helper/msqlTestRouter.js';
 
@@ -27,6 +28,7 @@ app.use('/api/listings', listingsRouter);
 app.use('/api/towns', townsRouter);
 app.use('/api/categories', categoriesRouter);
 app.use('/api/users', userRouter);
+app.use('/api/auth', authRouter);
 
 // Bet koks nenumatytas route'as grąžins 404
 app.use((req, res) => {
