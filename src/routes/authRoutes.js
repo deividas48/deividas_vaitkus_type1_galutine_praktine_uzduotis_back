@@ -18,15 +18,21 @@ const jwtSecret = 'your_jwt_secret'; // It's recommended to store this in an env
 authRouter.post('/register', async (req, res) => {
   // Extracting user details from the request body
   const {
-    name, email, password, avatar_url,
+    name,
+    email,
+    password,
+    avatar_url,
   } = req.body;
+
+  // Ensure avatar_url is not undefined; if it is, set it to null
+  const avatarUrlValue = avatar_url || null;
 
   try {
     // Hashing the password using bcrypt with a specified number of salt rounds
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const sql = `INSERT INTO vartotojai (name, email, password, avatar_url) VALUES (?, ?, ?, ?)`;
-    const [row, error] = await dbQueryWithData(sql, [name, email, hashedPassword, avatar_url]);
+    const [row, error] = await dbQueryWithData(sql, [name, email, hashedPassword, avatarUrlValue]);
 
     if (error) {
       console.warn('post rows error ===', error);
