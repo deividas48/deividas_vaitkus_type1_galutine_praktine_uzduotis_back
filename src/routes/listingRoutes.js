@@ -20,6 +20,7 @@ listingsRouter.get('/', async (req, res) => {
     seller,
     page = 1,
     limit = 10,
+    sort = 'date-desc', // Default sorting option
   } = req.query; // This means the request
   // sent from the front-end in this case query parameters is sent (the link ending)
 
@@ -32,97 +33,121 @@ listingsRouter.get('/', async (req, res) => {
     seller,
     page,
     limit,
+    sort,
   }); // Log the filters and pagination parameters received
 
-  // 1. #get_listings. Create the base SQL query
-  let sql = `SELECT skelbimai.id AS skelbimai_id, skelbimai.title AS skelbimai_title, skelbimai.main_image_url AS skelbimai_main_image_url, skelbimai.description AS skelbimai_description, skelbimai.price AS skelbimai_price, skelbimai.phone AS skelbimai_phone, skelbimai.type AS skelbimai_type, skelbimai.town_id AS skelbimai_town_id, skelbimai.user_id AS skelbimai_user_id, skelbimai.category_id AS skelbimai_category_id, skelbimai.is_published AS skelbimai_is_published, skelbimai.main_image_url_1 AS skelbimai_main_image_url_1, skelbimai.main_image_url_2 AS skelbimai_main_image_url_2, skelbimai.main_image_url_3 AS skelbimai_main_image_url_3, miestai.name AS town_name, kateogrijos.name AS category_name 
-  FROM skelbimai
-  LEFT JOIN miestai ON skelbimai.town_id = miestai.id
-  LEFT JOIN kateogrijos ON skelbimai.category_id = kateogrijos.id
-  LEFT JOIN vartotojai ON skelbimai.user_id = vartotojai.id
-  WHERE skelbimai.is_published = 1`; // Adding WHERE clause to only show published listings
+  // Create the base SQL query with filtering conditions
+  let baseQuery = `
+   FROM skelbimai
+   LEFT JOIN miestai ON skelbimai.town_id = miestai.id
+   LEFT JOIN kateogrijos ON skelbimai.category_id = kateogrijos.id
+   LEFT JOIN vartotojai ON skelbimai.user_id = vartotojai.id
+   WHERE skelbimai.is_published = 1
+ `; // Adding WHERE clause to only show published listings
 
-  // 2. #category_filter. Initialize an array to hold query parameters
+  // #category_filter. Initialize an array to hold query parameters
   const params = []; // Parameter - link ending for the filters
 
   if (category && !Number.isNaN(parseInt(category, 10))) {
-    sql += ' AND skelbimai.category_id = ?';
+    baseQuery += ' AND skelbimai.category_id = ?';
     params.push(parseInt(category, 10)); // Ensure it's an integer
   }
 
   if (minPrice && !Number.isNaN(parseFloat(minPrice))) {
-    sql += ' AND skelbimai.price >= ?';
+    baseQuery += ' AND skelbimai.price >= ?';
     params.push(parseFloat(minPrice)); // Ensure it's a number
   }
 
   if (maxPrice && !Number.isNaN(parseFloat(maxPrice))) {
-    sql += ' AND skelbimai.price <= ?';
+    baseQuery += ' AND skelbimai.price <= ?';
     params.push(parseFloat(maxPrice)); // Ensure it's a number
   }
 
   if (town && typeof town === 'string') {
-    sql += ' AND miestai.name LIKE ?';
+    baseQuery += ' AND miestai.name LIKE ?';
     params.push(`%${town}%`); // Add wildcard for partial matches
   }
 
   if (type && typeof type === 'string') {
-    sql += ' AND skelbimai.type LIKE ?';
+    baseQuery += ' AND skelbimai.type LIKE ?';
     params.push(`%${type}%`);
   }
 
   if (seller && typeof seller === 'string') {
-    sql += ' AND vartotojai.name LIKE ?';
+    baseQuery += ' AND vartotojai.name LIKE ?';
     params.push(`%${seller}%`);
   }
 
-  // Calculate the offset for pagination
+  // Sort based on the sort option passed from frontend
+  let sortQuery = '';
+  switch (sort) {
+    case 'price-asc':
+      sortQuery = ' ORDER BY skelbimai.price ASC';
+      break;
+    case 'price-desc':
+      sortQuery = ' ORDER BY skelbimai.price DESC';
+      break;
+    case 'date-asc':
+      sortQuery = ' ORDER BY skelbimai.created_at ASC';
+      break;
+    case 'date-desc':
+      sortQuery = ' ORDER BY skelbimai.created_at DESC';
+      break;
+    default:
+      sortQuery = ' ORDER BY skelbimai.created_at DESC'; // Default to price-asc
+      break;
+  }
+
+  // 1. Query to fetch the filtered listings
+  const sql = `
+ SELECT skelbimai.id AS skelbimai_id, skelbimai.title AS skelbimai_title,
+        skelbimai.main_image_url AS skelbimai_main_image_url, skelbimai.description AS skelbimai_description,
+        skelbimai.price AS skelbimai_price, skelbimai.phone AS skelbimai_phone, skelbimai.type AS skelbimai_type,
+        skelbimai.town_id AS skelbimai_town_id, skelbimai.user_id AS skelbimai_user_id,
+        skelbimai.category_id AS skelbimai_category_id, skelbimai.is_published AS skelbimai_is_published,
+        skelbimai.main_image_url_1 AS skelbimai_main_image_url_1, skelbimai.main_image_url_2 AS skelbimai_main_image_url_2,
+        skelbimai.main_image_url_3 AS skelbimai_main_image_url_3, miestai.name AS town_name, kateogrijos.name AS category_name
+ ${baseQuery}
+ ${sortQuery}
+ LIMIT ? OFFSET ?
+`;
   const offset = (parseInt(page, 10) - 1) * parseInt(limit, 10);
-
-  // Add LIMIT and OFFSET for pagination
-  sql += ` LIMIT ? OFFSET ?`;
   params.push(parseInt(limit, 10), offset);
-
-  console.log('SQL Query:', sql); // Log the SQL query
-  console.log('SQL Params:', params); // Log the query parameters
 
   try {
     const [rows, error] = await dbQueryWithData(sql, params);
 
-    // Log the rows to see what data is returned from the query
-    console.log('SQL Query Results:', rows);
-
-    // 7. #get_listings. If there is an error, log it and return a 400 status with the error message
     if (error) {
-      console.warn('get all listings error ===', error);
-      console.warn('error ===', error.message);
+      console.warn('Error fetching listings:', error.message);
       return res.status(400).json({ error: error.message });
     }
-    // Count total number of listings for pagination
-    const countSql = `SELECT COUNT(*) AS total FROM skelbimai WHERE is_published = 1`;
-    const [countResult, countError] = await dbQueryWithData(countSql, []);
+
+    // 2. Query to fetch the count of filtered listings
+    const countSql = `SELECT COUNT(*) AS total ${baseQuery}`;
+    const [countResult, countError] = await dbQueryWithData(
+      countSql,
+      params.slice(0, -2),
+    ); // Use the same filters, but exclude LIMIT and OFFSET
 
     if (countError) {
-      console.warn('get count error ===', countError);
+      console.warn('Error counting listings:', countError.message);
       return res.status(400).json({ error: countError.message });
     }
 
     const totalListings = countResult[0].total;
     const totalPages = Math.ceil(totalListings / parseInt(limit, 10));
-    console.log('totalPages', totalPages)
-    const countSql = `SELECT COUNT(*) AS total ${baseQuery}`;
 
     res.json({
-      success: true, // Flag to indicate successful response
-      // Ensure `rows` contains listings data, default to empty array if not
+      success: true,
       listings: rows.length ? rows : [],
-      totalPages: totalPages || 1, // Ensure totalPages is present, default to 1 if undefined
-      currentPage: parseInt(page, 10), // Ensure currentPage is sent back correctly as an integer
+      totalPages: totalPages || 1,
+      currentPage: parseInt(page, 10),
     });
   } catch (error) {
-    console.error('Error fetching listings:', error);
+    console.error('Error fetching listings or count:', error);
     return res
       .status(500)
-      .json({ error: 'An error occurred while fetching listings' });
+      .json({ error: 'An error occurred while fetching listings or count' });
   }
 });
 
