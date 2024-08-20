@@ -1,3 +1,5 @@
+// src/routes/categoryRoutes.js
+
 import express from 'express';
 import dbQueryWithData from '../helper/helper.js';
 

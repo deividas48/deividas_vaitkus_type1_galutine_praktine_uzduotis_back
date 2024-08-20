@@ -86,3 +86,19 @@ GET http://localhost:3000/api/categories/1
 
 ### Get listings by category ID
 GET http://localhost:3000/api/listings?category=1
+
+### Get 1
+GET http://localhost:3000/api/listings?page=1&limit=10&minPrice=100&maxPrice=1000&town=NewYork&type=sell&seller=Jonas
+
+### Get 2
+GET http://localhost:3000/api/listings?page=1&limit=10
+
+### Get 3
+GET http://localhost:3000/api/listings?page=$1&sort=$price-asc&category=$1
+# Making API Request: /api/listings?page=1&sort=price-asc&category=undefined
+
+### Get 4
+GET http://localhost:3000/api/listings?category=1&page=1&limit=10
+
+### Get 5
+GET http://localhost:3000/api/listings?page=1&sort=price-asc&category=1
