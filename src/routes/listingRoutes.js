@@ -21,6 +21,7 @@ listingsRouter.get('/', async (req, res) => {
     page = 1,
     limit = 10,
     sort = 'date-desc', // Default sorting option
+    search,
   } = req.query; // This means the request
   // sent from the front-end in this case query parameters is sent (the link ending)
 
@@ -76,6 +77,12 @@ listingsRouter.get('/', async (req, res) => {
   if (seller && typeof seller === 'string') {
     baseQuery += ' AND vartotojai.name LIKE ?';
     params.push(`%${seller}%`);
+  }
+
+  if (search && search.trim()) {
+    baseQuery += ` AND (skelbimai.title LIKE ? OR skelbimai.description LIKE ?)`;
+    const searchTerm = `%${search.trim()}%`;
+    params.push(searchTerm, searchTerm);
   }
 
   // Sort based on the sort option passed from frontend
