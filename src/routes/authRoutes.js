@@ -99,32 +99,37 @@ authRouter.post('/login', async (req, res) => {
 
 // PUT /api/auth/user/:id - Update user information and optionally password
 authRouter.put('/user/:id', async (req, res) => {
-  const userId = req.params.id;
   const {
     name, email, avatar_url, oldPassword, newPassword,
   } = req.body;
+  const userId = req.params.id;
 
   try {
     let user;
 
-    // Handle password update if provided
-    if (newPassword) {
-      // Fetch the current user details to verify the old password if a
-      // new password is being provided
-      const sqlFetchUser = `SELECT * FROM vartotojai WHERE id = ?`;
-      const [users, errorFetch] = await dbQueryWithData(sqlFetchUser, [userId]);
+    // Fetch the current user details to verify the old password if a
+    // new password is being provided
+    const sqlFetchUser = `SELECT * FROM vartotojai WHERE id = ?`;
+    const [users, errorFetch] = await dbQueryWithData(sqlFetchUser, [userId]);
 
-      if (errorFetch || users.length === 0) {
-        return res.status(400).json({ error: 'User not found' });
-      }
+    // Log the fetched user data
+    console.log(users); // This will show what is actually being returned from the database.
 
+    if (errorFetch) {
+      console.error('Error fetching user:', errorFetch);
+      return res.status(500).json({ error: 'Failed to fetch user' });
+    }
+
+    if (users && users.length > 0) {
       [user] = users;
+    } else {
+      return res.status(404).json({ error: 'User not found' });
+    }
 
+    // Handle password update if provided
+    if (newPassword && user) {
       // Verify the old password only if a new password is provided
-      const isOldPasswordValid = await bcrypt.compare(
-        oldPassword,
-        user.password,
-      );
+      const isOldPasswordValid = await bcrypt.compare(oldPassword, user.password);
       if (!isOldPasswordValid) {
         return res.status(400).json({ error: 'Old password is incorrect' });
       }
@@ -151,28 +156,30 @@ authRouter.put('/user/:id', async (req, res) => {
         msg: `User with id '${userId}' was updated with new password`,
       });
     }
+
     // Update user information if no password is provided
-    const sqlUpdate = `UPDATE vartotojai SET name = ?, email = ?, avatar_url = ? WHERE id = ?`;
-    const [result, errorUpdate] = await dbQueryWithData(sqlUpdate, [
-      name || user.name,
-      email || user.email,
-      avatar_url !== undefined ? avatar_url : user.avatar_url,
-      userId,
-    ]);
+    if (user) {
+      const sqlUpdate = `UPDATE vartotojai SET name = ?, email = ?, avatar_url = ? WHERE id = ?`;
+      const [result, errorUpdate] = await dbQueryWithData(sqlUpdate, [
+        name || user.name,
+        email || user.email,
+        avatar_url !== undefined ? avatar_url : user.avatar_url,
+        userId,
+      ]);
 
-    if (errorUpdate) {
-      console.warn('update user error ===', errorUpdate);
-      return res.status(400).json({ error: 'Error updating user' });
+      if (errorUpdate) {
+        console.warn('update user error ===', errorUpdate);
+        return res.status(400).json({ error: 'Error updating user' });
+      }
+
+      return res.status(200).json({
+        msg: `User with id '${userId}' was updated without password change`,
+      });
     }
-
-    return res.status(200).json({
-      msg: `User with id '${userId}' was updated without password change`,
-    });
   } catch (err) {
     console.error('Error:', err);
     res.status(500).json({
-      error:
-        'Server error. An unexpected error occurred. Please try again later.',
+      error: 'Server error. An unexpected error occurred. Please try again later.',
     });
   }
 });
