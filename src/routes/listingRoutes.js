@@ -168,7 +168,9 @@ listingsRouter.get('/:listingID', async (req, res) => {
   // #1.2_Get. Before dbQueryWithData function, create a SQL query to get a single listing by ID.
   const sql = `SELECT ${listingsColumns}, miestai.name AS town_name, 
        kateogrijos.name AS category_name,
-       vartotojai.avatar_url AS user_photo 
+       vartotojai.avatar_url AS user_photo, 
+       vartotojai.name AS user_name, 
+       vartotojai.email AS user_email 
        FROM skelbimai
 LEFT JOIN miestai ON skelbimai.town_id = miestai.id
 LEFT JOIN kateogrijos ON skelbimai.category_id = kateogrijos.id
