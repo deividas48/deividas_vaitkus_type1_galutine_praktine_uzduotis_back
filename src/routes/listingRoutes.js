@@ -11,6 +11,7 @@ const listingsColumns = 'title, main_image_url, description, price, phone, type,
 listingsRouter.get('/', async (req, res) => {
   console.log('Received query params:', req.query);
   // 1. #category_filter. Extract the category query parameter from the request
+  // Parameters
   const {
     category,
     minPrice,
@@ -113,7 +114,7 @@ listingsRouter.get('/', async (req, res) => {
         skelbimai.town_id AS skelbimai_town_id, skelbimai.user_id AS skelbimai_user_id,
         skelbimai.category_id AS skelbimai_category_id, skelbimai.is_published AS skelbimai_is_published,
         skelbimai.main_image_url_1 AS skelbimai_main_image_url_1, skelbimai.main_image_url_2 AS skelbimai_main_image_url_2,
-        skelbimai.main_image_url_3 AS skelbimai_main_image_url_3, miestai.name AS town_name, kateogrijos.name AS category_name
+        skelbimai.main_image_url_3 AS skelbimai_main_image_url_3, miestai.name AS town_name, kateogrijos.name AS category_name, vartotojai.avatar_url AS user_photo
  ${baseQuery}
  ${sortQuery}
  LIMIT ? OFFSET ?
@@ -159,12 +160,20 @@ listingsRouter.get('/', async (req, res) => {
 });
 
 // GET /api/listings/:id - returns a single listing
+
 // #1_Get. Extracting listingID from the route parameters (page link parameter)
 listingsRouter.get('/:listingID', async (req, res) => {
   // #1.1_Get. 'req.params.listingID' - parameter (/parameter).
   const { listingID } = req.params;
   // #1.2_Get. Before dbQueryWithData function, create a SQL query to get a single listing by ID.
-  const sql = `SELECT ${listingsColumns} FROM skelbimai WHERE is_published = 1 AND id = ?`;
+  const sql = `SELECT ${listingsColumns}, miestai.name AS town_name, 
+       kateogrijos.name AS category_name,
+       vartotojai.avatar_url AS user_photo 
+       FROM skelbimai
+LEFT JOIN miestai ON skelbimai.town_id = miestai.id
+LEFT JOIN kateogrijos ON skelbimai.category_id = kateogrijos.id
+LEFT JOIN vartotojai ON skelbimai.user_id = vartotojai.id 
+WHERE is_published = 1 AND skelbimai.id = ?`;
   // #1.3_Get. Use the dbQueryWithData function to get the data from the database.
   const [row, error] = await dbQueryWithData(sql, [listingID]); // Get data from DB.
   // #1.4_Get. If there is an error by getting data, return it.
