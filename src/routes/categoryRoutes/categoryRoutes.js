@@ -1,7 +1,7 @@
-// src/routes/categoryRoutes.js
+// src/routes/categoryRoutes/categoryRoutes.js
 
 import express from 'express';
-import dbQueryWithData from '../helper/helper.js';
+import dbQueryWithData from '../../helper/helper.js';
 
 const categoriesRouter = express.Router();
 

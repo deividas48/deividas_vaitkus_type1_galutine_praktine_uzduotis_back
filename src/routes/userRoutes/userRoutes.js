@@ -1,5 +1,7 @@
+// src\routes\userRoutes\userRoutes.js
+
 import express from 'express';
-import dbQueryWithData from '../helper/helper.js';
+import dbQueryWithData from '../../helper/helper.js';
 
 const userRouter = express.Router();
 

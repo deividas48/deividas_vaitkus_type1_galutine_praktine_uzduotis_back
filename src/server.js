@@ -3,11 +3,11 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import listingsRouter from './routes/listingRoutes.js';
-import townsRouter from './routes/townRoutes.js';
-import categoriesRouter from './routes/categoryRoutes.js';
-import userRouter from './routes/userRoutes.js';
-import authRouter from './routes/authRoutes.js';
+import listingsRouter from './routes/listing/listingRoutes.js';
+import townsRouter from './routes/townRoutes/townRoutes.js';
+import categoriesRouter from './routes/categoryRoutes/categoryRoutes.js';
+import userRouter from './routes/userRoutes/userRoutes.js';
+import authRouter from './routes/authRoutes/authRoutes.js';
 import { PORT } from './config.js';
 import testConnection from './helper/msqlTestRouter.js';
 

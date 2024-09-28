@@ -1,7 +1,7 @@
-// src/routes/listingRoutes.js
+// src/routes/listing/listingRoutes.js
 
 import express from 'express';
-import dbQueryWithData from '../helper/helper.js';
+import dbQueryWithData from '../../helper/helper.js';
 
 const listingsRouter = express.Router();
 

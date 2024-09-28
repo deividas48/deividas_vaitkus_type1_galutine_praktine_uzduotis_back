@@ -1,3 +1,5 @@
+// src\routes\authRoutes\authRoutes.js
+
 import express from 'express';
 import bcrypt from 'bcrypt';
 // A JSON Web Token (JWT) is a small piece of data that is used to prove that a user is
@@ -5,7 +7,7 @@ import bcrypt from 'bcrypt';
 // right things on a website or app.
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import dbQueryWithData from '../helper/helper.js';
+import dbQueryWithData from '../../helper/helper.js';
 
 dotenv.config(); // Load environment variables
 

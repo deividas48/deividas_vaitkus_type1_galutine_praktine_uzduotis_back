@@ -1,7 +1,7 @@
-// townRoutes.js
+// \src\routes\townRoutes\townRoutes.js
 
 import express from 'express';
-import dbQueryWithData from '../helper/helper.js';
+import dbQueryWithData from '../../helper/helper.js';
 
 const townsRouter = express.Router();
 
