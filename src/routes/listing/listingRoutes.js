@@ -163,7 +163,7 @@ listingsRouter.get('/', async (req, res) => {
 
 // #1_Get. Extracting listingID from the route parameters (page link parameter)
 listingsRouter.get('/:listingID', async (req, res) => {
-  // #1.1_Get. 'req.params.listingID' - parameter (/parameter).
+  // #1.1_Get. Get parameter.
   const { listingID } = req.params;
   // #1.2_Get. Before dbQueryWithData function, create a SQL query to get a single listing by ID.
   const sql = `SELECT ${listingsColumns}, miestai.name AS town_name, 

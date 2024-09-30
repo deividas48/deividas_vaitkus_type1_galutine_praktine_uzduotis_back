@@ -4,6 +4,7 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import listingsRouter from './routes/listing/listingRoutes.js';
+import listingsRouterByUser from './routes/listing/listingRoutesByUser.js';
 import townsRouter from './routes/townRoutes/townRoutes.js';
 import categoriesRouter from './routes/categoryRoutes/categoryRoutes.js';
 import userRouter from './routes/userRoutes/userRoutes.js';
@@ -24,7 +25,8 @@ app.use(morgan('dev')); // Log all requests to the console.
 app.use(express.json()); // Parse JSON-encoded bodies
 
 // Routes
-app.use('/api/listings', listingsRouter);
+app.use('/api/listings', listingsRouter); // Use the general listings routes
+app.use('/api/listings', listingsRouterByUser); // Use the user-specific listings routes
 app.use('/api/towns', townsRouter);
 app.use('/api/categories', categoriesRouter);
 app.use('/api/users', userRouter);
