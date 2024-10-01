@@ -169,4 +169,16 @@ ADD
 ADD
     COLUMN main_image_url_2 VARCHAR(1000),
 ADD
-    COLUMN main_image_url_3 VARCHAR(1000)
+    COLUMN main_image_url_3 VARCHAR(1000);
+
+-- Add two aditional columns to 'vartotojai' table 
+ALTER TABLE
+    `vartotojai`
+ADD
+    `user_city` VARCHAR(24) NOT NULL
+AFTER
+    `password`,
+ADD
+    `user_phone` VARCHAR(20) NOT NULL
+AFTER
+    `user_city`;

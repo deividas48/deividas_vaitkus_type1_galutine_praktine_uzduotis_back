@@ -5,7 +5,7 @@ import dbQueryWithData from '../../helper/helper.js';
 
 const userRouter = express.Router();
 
-const usersColumns = 'id, name, email, password, avatar_url';
+const usersColumns = 'id, name, email, password, user_city, user_phone, avatar_url';
 
 // GET /api/users - grazina visus skelbimus
 userRouter.get('/', async (_req, res) => {

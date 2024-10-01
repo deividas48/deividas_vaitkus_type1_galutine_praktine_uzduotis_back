@@ -104,4 +104,4 @@ GET http://localhost:3000/api/listings?category=1&page=1&limit=10
 GET http://localhost:3000/api/listings?page=1&sort=price-asc&category=1
 
 ### Get the listings by a single user id
-GET http://localhost:3000/api/listings/byUser/1
+GET http://localhost:3000/api/listings/byUser/9
