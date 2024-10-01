@@ -41,11 +41,9 @@ WHERE
   // #1.5_Get. Return 404 if no record with the given ID
   if (row.length === 0) {
     console.log('row does not exist');
-    return res.status(404).json({ error: 'row does not exist' });
+    // #1.6_Get. Return the listing (skelbimą) as an object. This is the response to the client.
+    return res.json(row);
   }
-
-  // #1.6_Get. Return the listing (skelbimą) as an object. This is the response to the client.
-  res.json(row);
 });
 
 export default listingsRouterByUser;
