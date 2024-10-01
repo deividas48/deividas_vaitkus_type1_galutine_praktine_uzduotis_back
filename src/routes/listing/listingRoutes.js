@@ -5,7 +5,7 @@ import dbQueryWithData from '../../helper/helper.js';
 
 const listingsRouter = express.Router();
 
-const listingsColumns = 'title, main_image_url, description, price, phone, type, town_id, user_id, category_id, is_published, main_image_url_1, main_image_url_2, main_image_url_3';
+const listingsColumns = 'title, main_image_url, description, price, phone, type, town_id, user_id, category_id, is_published, list_image_url_1, list_image_url_2, list_image_url_3, list_image_url_4, list_image_url_5, list_image_url_6, list_image_url_7, list_image_url_8, list_image_url_9';
 
 // #get_listings. GET /api/listings - returns all listings or listings filtered by category
 listingsRouter.get('/', async (req, res) => {
@@ -113,8 +113,8 @@ listingsRouter.get('/', async (req, res) => {
         skelbimai.price AS skelbimai_price, skelbimai.phone AS skelbimai_phone, skelbimai.type AS skelbimai_type,
         skelbimai.town_id AS skelbimai_town_id, skelbimai.user_id AS skelbimai_user_id,
         skelbimai.category_id AS skelbimai_category_id, skelbimai.is_published AS skelbimai_is_published,
-        skelbimai.main_image_url_1 AS skelbimai_main_image_url_1, skelbimai.main_image_url_2 AS skelbimai_main_image_url_2,
-        skelbimai.main_image_url_3 AS skelbimai_main_image_url_3, miestai.name AS town_name, kateogrijos.name AS category_name, vartotojai.avatar_url AS user_photo
+        skelbimai.list_image_url_1 AS skelbimai_list_image_url_1, skelbimai.list_image_url_2 AS skelbimai_list_image_url_2,
+        skelbimai.list_image_url_3 AS skelbimai_list_image_url_3, skelbimai.list_image_url_4 AS skelbimai_list_image_url_4, skelbimai.list_image_url_5 AS skelbimai_list_image_url_5, skelbimai.list_image_url_6 AS skelbimai_list_image_url_6, skelbimai.list_image_url_7 AS skelbimai_list_image_url_7, skelbimai.list_image_url_8 AS skelbimai_list_image_url_8, skelbimai.list_image_url_9 AS skelbimai_list_image_url_9, miestai.name AS town_name, kateogrijos.name AS category_name, vartotojai.avatar_url AS user_photo
  ${baseQuery}
  ${sortQuery}
  LIMIT ? OFFSET ?
@@ -214,9 +214,9 @@ listingsRouter.post('/', async (req, res) => {
     user_id,
     category_id,
     is_published = 1,
-    main_image_url_1,
-    main_image_url_2,
-    main_image_url_3,
+    list_image_url_1,
+    list_image_url_2,
+    list_image_url_3,
   } = req.body;
 
   // #1.2_Post. Ensure required fields are present
@@ -248,9 +248,9 @@ listingsRouter.post('/', async (req, res) => {
     user_id || null, // null - ...
     category_id,
     is_published,
-    main_image_url_1 || null, // null - ...
-    main_image_url_2 || null, // null - ...
-    main_image_url_3 || null, // null - ...
+    list_image_url_1 || null, // null - ...
+    list_image_url_2 || null, // null - ...
+    list_image_url_3 || null, // null - ...
   ];
 
   // #1.4_Post. Create a SQL query to insert a new row into the database

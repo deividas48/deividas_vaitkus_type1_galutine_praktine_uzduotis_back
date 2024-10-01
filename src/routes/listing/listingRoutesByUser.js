@@ -5,7 +5,7 @@ import dbQueryWithData from '../../helper/helper.js';
 
 const listingsRouterByUser = express.Router();
 
-const listingsColumns = 'skelbimai.id AS skelbimai_id, skelbimai.title AS skelbimai_title, skelbimai.main_image_url AS skelbimai_main_image_url, skelbimai.description AS skelbimai_description, skelbimai.price AS skelbimai_price, phone, skelbimai.type AS skelbimai_type, skelbimai.town_id AS skelbimai_town_id, skelbimai.user_id AS skelbimai_user_id, skelbimai.category_id AS skelbimai_category_id, skelbimai.is_published AS skelbimai_is_published, skelbimai.main_image_url_1 AS skelbimai_main_image_url_1, skelbimai.main_image_url_2 AS skelbimai_main_image_url_2, skelbimai.main_image_url_3 AS skelbimai_main_image_url_3';
+const listingsColumns = 'skelbimai.id AS skelbimai_id, skelbimai.title AS skelbimai_title, skelbimai.main_image_url AS skelbimai_main_image_url, skelbimai.description AS skelbimai_description, skelbimai.price AS skelbimai_price, phone, skelbimai.type AS skelbimai_type, skelbimai.town_id AS skelbimai_town_id, skelbimai.user_id AS skelbimai_user_id, skelbimai.category_id AS skelbimai_category_id, skelbimai.is_published AS skelbimai_is_published, skelbimai.list_image_url_1 AS skelbimai_list_image_url_1, skelbimai.list_image_url_2 AS skelbimai_list_image_url_2, skelbimai.list_image_url_3 AS skelbimai_list_image_url_3, skelbimai.list_image_url_4 AS skelbimai_list_image_url_4, skelbimai.list_image_url_5 AS skelbimai_list_image_url_5, skelbimai.list_image_url_6 AS skelbimai_list_image_url_6, skelbimai.list_image_url_7 AS skelbimai_list_image_url_7, skelbimai.list_image_url_8 AS skelbimai_list_image_url_8, skelbimai.list_image_url_9 AS skelbimai_list_image_url_9';
 
 // GET /api/listings/byUser/:userID - returns a single user listings
 
