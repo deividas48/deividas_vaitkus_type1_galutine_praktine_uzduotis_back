@@ -182,3 +182,31 @@ ADD
     `user_phone` VARCHAR(20) NOT NULL
 AFTER
     `user_city`;
+
+-- Create 6 more columns for listings images
+ALTER TABLE
+    `skelbimai`
+ADD
+    `main_image_url_4` VARCHAR(80) NULL DEFAULT NULL
+AFTER
+    `main_image_url_3`,
+ADD
+    `main_image_url_4` VARCHAR(80) NULL DEFAULT NULL
+AFTER
+    `main_image_url_4`,
+ADD
+    `main_image_url_4` VARCHAR(80) NULL DEFAULT NULL
+AFTER
+    `main_image_url_4`,
+ADD
+    `main_image_url_4` VARCHAR(80) NULL DEFAULT NULL
+AFTER
+    `main_image_url_4`,
+ADD
+    `main_image_url_4` VARCHAR(80) NULL DEFAULT NULL
+AFTER
+    `main_image_url_4`,
+ADD
+    `main_image_url_4` VARCHAR(80) NULL DEFAULT NULL
+AFTER
+    `main_image_url_4`;
