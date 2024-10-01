@@ -191,22 +191,22 @@ ADD
 AFTER
     `main_image_url_3`,
 ADD
-    `main_image_url_4` VARCHAR(80) NULL DEFAULT NULL
+    `main_image_url_5` VARCHAR(80) NULL DEFAULT NULL
 AFTER
     `main_image_url_4`,
 ADD
-    `main_image_url_4` VARCHAR(80) NULL DEFAULT NULL
+    `main_image_url_6` VARCHAR(80) NULL DEFAULT NULL
 AFTER
-    `main_image_url_4`,
+    `main_image_url_5`,
 ADD
-    `main_image_url_4` VARCHAR(80) NULL DEFAULT NULL
+    `main_image_url_7` VARCHAR(80) NULL DEFAULT NULL
 AFTER
-    `main_image_url_4`,
+    `main_image_url_6`,
 ADD
-    `main_image_url_4` VARCHAR(80) NULL DEFAULT NULL
+    `main_image_url_8` VARCHAR(80) NULL DEFAULT NULL
 AFTER
-    `main_image_url_4`,
+    `main_image_url_7`,
 ADD
-    `main_image_url_4` VARCHAR(80) NULL DEFAULT NULL
+    `main_image_url_9` VARCHAR(80) NULL DEFAULT NULL
 AFTER
-    `main_image_url_4`;
+    `main_image_url_8`;
