@@ -213,19 +213,28 @@ AFTER
 
 -- Change the names of listing images columns
 ALTER TABLE
-    `skelbimai` CHANGE `main_image_url_1` `list_image_url_1` VARCHAR(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+    `skelbimai` CHANGE `main_image_url_1` `list_image_url_1` VARCHAR(80) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 
 ALTER TABLE
-    `skelbimai` CHANGE `main_image_url_2` `list_image_url_2` VARCHAR(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+    `skelbimai` CHANGE `main_image_url_2` `list_image_url_2` VARCHAR(80) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 
 ALTER TABLE
-    `skelbimai` CHANGE `main_image_url_3` `list_image_url_3` VARCHAR(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+    `skelbimai` CHANGE `main_image_url_3` `list_image_url_3` VARCHAR(80) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 
 ALTER TABLE
-    `skelbimai` CHANGE `main_image_url_4` `list_image_url_4` VARCHAR(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+    `skelbimai` CHANGE `main_image_url_4` `list_image_url_4` VARCHAR(80) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 
 ALTER TABLE
-    `skelbimai` CHANGE `main_image_url_5` `list_image_url_5` VARCHAR(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+    `skelbimai` CHANGE `main_image_url_5` `list_image_url_5` VARCHAR(80) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 
 ALTER TABLE
-    `skelbimai` CHANGE `main_image_url_6` `list_image_url_6` VARCHAR(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+    `skelbimai` CHANGE `main_image_url_6` `list_image_url_6` VARCHAR(80) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+
+ALTER TABLE
+    `skelbimai` CHANGE `main_image_url_7` `list_image_url_7` VARCHAR(80) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+
+ALTER TABLE
+    `skelbimai` CHANGE `main_image_url_8` `list_image_url_8` VARCHAR(80) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+
+ALTER TABLE
+    `skelbimai` CHANGE `main_image_url_9` `list_image_url_9` VARCHAR(80) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
