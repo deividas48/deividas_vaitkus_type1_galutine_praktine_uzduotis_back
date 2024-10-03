@@ -27,5 +27,11 @@ module.exports = {
     camelcase: 'off',
     quotes: 'off',
     'linebreak-style': 'off',
+    'no-underscore-dangle': [
+      'error',
+      {
+        allow: ['__dirname', '__filename'],
+      },
+    ],
   },
 };

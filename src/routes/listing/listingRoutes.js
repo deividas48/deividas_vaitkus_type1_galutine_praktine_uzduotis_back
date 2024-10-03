@@ -1,15 +1,41 @@
 // src/routes/listing/listingRoutes.js
 
 import express from 'express';
+import multer from 'multer';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url'; // Import fileURLToPath
 import dbQueryWithData from '../../helper/helper.js';
 
 const listingsRouter = express.Router();
 
 const listingsColumns = 'title, main_image_url, description, price, phone, type, town_id, user_id, category_id, is_published, list_image_url_1, list_image_url_2, list_image_url_3, list_image_url_4, list_image_url_5, list_image_url_6, list_image_url_7, list_image_url_8, list_image_url_9';
 
+// Define __filename and __dirname in ES module scope
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Define the absolute path for the upload directory
+const uploadDir = path.resolve(__dirname, '../../uploads/images/sell');
+
+// Ensure the upload directory exists
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+const upload = multer({ storage });
+
 // #get_listings. GET /api/listings - returns all listings or listings filtered by category
 listingsRouter.get('/', async (req, res) => {
-  console.log('Received query params:', req.query);
   // 1. #category_filter. Extract the category query parameter from the request
   // Parameters
   const {
@@ -196,16 +222,16 @@ WHERE is_published = 1 AND skelbimai.id = ?`;
   res.json(row);
 });
 
-// POST - creates a new listing
-// #1_Post. Create a post request to the /api/listings route
-listingsRouter.post('/', async (req, res) => {
-  // #1.1_Post. Destructure the request body.
-  // 'req.body' - is the data that is sent to the server from the client (frontend).
+// POST - creates a new listing with file upload
+listingsRouter.post('/', upload.array('photos', 10), async (req, res) => {
+  // req.files contains the array of uploaded files
+  // eslint-disable-next-line prefer-destructuring
+  const files = req.files;
+
   const {
     // id is not needed, because it is autoincremented in the DB itself.
     // The variable names below are the same as the names of the columns in the database.
     title,
-    main_image_url,
     description,
     price,
     phone,
@@ -214,9 +240,9 @@ listingsRouter.post('/', async (req, res) => {
     user_id,
     category_id,
     is_published = 1,
-    list_image_url_1,
-    list_image_url_2,
-    list_image_url_3,
+    // list_image_url_1,
+    // list_image_url_2,
+    // list_image_url_3,
   } = req.body;
 
   // #1.2_Post. Ensure required fields are present
@@ -232,9 +258,12 @@ listingsRouter.post('/', async (req, res) => {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  // #1.3_Post. Create an array of arguments to pass to the query. The order of the arguments
-  // must match the order of the columns in the query below.
-  // Variable names in the array below must match the variable names above (req.body object).
+  // Handle file uploads
+  const main_image_url = files[0] ? files[0].filename : null;
+  const list_image_url_1 = files[1] ? files[1].filename : null;
+  const list_image_url_2 = files[2] ? files[2].filename : null;
+  const list_image_url_3 = files[3] ? files[3].filename : null;
+
   const argArr = [
     // id, // id is autoincremented, so we don't need to pass it
     title,
@@ -251,26 +280,30 @@ listingsRouter.post('/', async (req, res) => {
     list_image_url_1 || null, // null - ...
     list_image_url_2 || null, // null - ...
     list_image_url_3 || null, // null - ...
+    null, // list_image_url_4
+    null, // list_image_url_5
+    null, // list_image_url_6
+    null, // list_image_url_7
+    null, // list_image_url_8
+    null, // list_image_url_9
   ];
 
-  // #1.4_Post. Create a SQL query to insert a new row into the database
-  const sql = `INSERT INTO skelbimai (${listingsColumns}) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-  // #1.5_Post. Use the dbQueryWithData function to execute the query
-  const [row, error] = await dbQueryWithData(sql, argArr); // Make a query to the database.
-  // 'sql' - SQL query.
-  // The 'argArr' array is populated with the values from the request body (req.body)
+  // Define the SQL query for inserting the listing into the database
+  const sql = `INSERT INTO skelbimai (${listingsColumns}) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-  // #1.6_Post. If there is an error, return it
-  if (error) {
-    console.warn('post rows error ===', error);
-    console.warn('error ===', error.message);
-    return res.status(400).json({ error: error.message }); // Show informative error message
+  // Unique variable names for row and error
+  try {
+    const [insertedRow, insertError] = await dbQueryWithData(sql, argArr);
+    if (insertError) {
+      console.warn('Error inserting listing:', insertError);
+      return res.status(400).json({ error: insertError.message });
+    }
+
+    res.json({ id: insertedRow.insertId, ...req.body });
+  } catch (catchError) {
+    console.error('Error creating listing:', catchError);
+    return res.status(500).json({ error: 'An error occurred while creating listing' });
   }
-  // Return the created listing by filling columns
-  // #1.7_Post. Return the created listing
-  res.json({ id: row.insertId, ...req.body });
-  // columns. 'res.json' - send the response to the client. The id
-  //  is autoincremented, ...req.body - the rest of the data from frontend.
 });
 
 // DELETE /api/listings/:id - istrina skelbima (is_published = false)
