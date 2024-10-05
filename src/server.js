@@ -9,6 +9,7 @@ import multer from 'multer'; // Import multer
 import path from 'path'; // Import path for directory handling
 import listingsRouter from './routes/listing/listingRoutes.js';
 import listingsRouterByUser from './routes/listing/listingRoutesByUser.js';
+import listingsRouterFormAndFiles from './routes/listing/listingRoutesFormAndFiles.js';
 import townsRouter from './routes/townRoutes/townRoutes.js';
 import categoriesRouter from './routes/categoryRoutes/categoryRoutes.js';
 import userRouter from './routes/userRoutes/userRoutes.js';
@@ -43,6 +44,7 @@ const upload = multer({ storage }); // Create the multer instance
 // Routes
 app.use('/api/listings', listingsRouter); // Use the general listings routes
 app.use('/api/listings', listingsRouterByUser); // Use the user-specific listings routes
+app.use('/api/listings', listingsRouterFormAndFiles); // Use the form-specific post listings routes
 app.use('/api/towns', townsRouter);
 app.use('/api/categories', categoriesRouter);
 app.use('/api/users', userRouter);
@@ -54,7 +56,9 @@ app.post('../uploads/images/sell', upload.single('photo'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }
-  res.status(200).json({ message: 'File uploaded successfully', file: req.file });
+  res
+    .status(200)
+    .json({ message: 'File uploaded successfully', file: req.file });
 });
 
 // Bet koks nenumatytas route'as grąžins 404
