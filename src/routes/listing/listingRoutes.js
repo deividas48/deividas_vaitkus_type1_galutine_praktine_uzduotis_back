@@ -1,38 +1,45 @@
 // src/routes/listing/listingRoutes.js
 
 import express from 'express';
-import multer from 'multer';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url'; // Import fileURLToPath
+import multer from 'multer'; // Handles file uploads.
+// import fs from 'fs'; // fs: Interacts with the file system (e.g., checking if folders exist).
+import path from 'path'; // path and fileURLToPath: Helps resolve file paths correctly.
+import { fileURLToPath } from 'url'; // Also helps resolve file paths correctly.
 import dbQueryWithData from '../../helper/helper.js';
 
 const listingsRouter = express.Router();
 
 const listingsColumns = 'title, main_image_url, description, price, phone, type, town_id, user_id, category_id, is_published, list_image_url_1, list_image_url_2, list_image_url_3, list_image_url_4, list_image_url_5, list_image_url_6, list_image_url_7, list_image_url_8, list_image_url_9';
 
+// /* Manages files uploaded from the front-end
+
 // Define __filename and __dirname in ES module scope
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url); // log ≈ listingRoutes.js: the current file name
+const __dirname = path.dirname(__filename); // log ≈ '/Users/.../Documents/.../src/routes/listing':
+// __dirname logs the directory path where listingRoutes.js is located
 
-// Define the absolute path for the upload directory
-const uploadDir = path.resolve(__dirname, '../../uploads/images/sell');
-
-// Ensure the upload directory exists
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
+// Define the absolute path for the files (images) upload directory
+const uploadDir = path.resolve(__dirname, '../../uploads/images/sell'); // log ≈ '/Users/.../Documents/.../uploads/images/sell'
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
+  // When a file is uploaded...
   destination: (req, file, cb) => {
+    // Log≈ ...uploadate file example.jpg to directory: /Users/.../Documents/.../uploads/images/sell
     cb(null, uploadDir);
   },
+
+  // When setting the filename...
   filename: (req, file, cb) => {
+    // ...set a unique name for the uploaded file
     cb(null, `${Date.now()}-${file.originalname}`);
   },
 });
+
+// Initializing Multer with the defined storage settings
 const upload = multer({ storage });
+
+// */ Manages files uploaded from the front-end
 
 // #get_listings. GET /api/listings - returns all listings or listings filtered by category
 listingsRouter.get('/', async (req, res) => {
@@ -222,15 +229,15 @@ WHERE is_published = 1 AND skelbimai.id = ?`;
   res.json(row);
 });
 
-// POST - creates a new listing with file upload
+// POST - creates a new listing with file (images) upload
 listingsRouter.post('/', upload.array('photos', 10), async (req, res) => {
   // req.files contains the array of uploaded files
   // eslint-disable-next-line prefer-destructuring
-  const files = req.files;
+
+  // Files (images) from the front-end
+  const { files } = req; // or ≈ 'const files = req.files;'
 
   const {
-    // id is not needed, because it is autoincremented in the DB itself.
-    // The variable names below are the same as the names of the columns in the database.
     title,
     description,
     price,
@@ -240,9 +247,6 @@ listingsRouter.post('/', upload.array('photos', 10), async (req, res) => {
     user_id,
     category_id,
     is_published = 1,
-    // list_image_url_1,
-    // list_image_url_2,
-    // list_image_url_3,
   } = req.body;
 
   // #1.2_Post. Ensure required fields are present
@@ -258,8 +262,9 @@ listingsRouter.post('/', upload.array('photos', 10), async (req, res) => {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  // Handle file uploads
+  // Handle file uploads. It's only for files (images) naming.
   const main_image_url = files[0] ? files[0].filename : null;
+  // Example: list_image_url_1 is set to '1638316800000-photo1.jpg'.
   const list_image_url_1 = files[1] ? files[1].filename : null;
   const list_image_url_2 = files[2] ? files[2].filename : null;
   const list_image_url_3 = files[3] ? files[3].filename : null;
@@ -302,7 +307,9 @@ listingsRouter.post('/', upload.array('photos', 10), async (req, res) => {
     res.json({ id: insertedRow.insertId, ...req.body });
   } catch (catchError) {
     console.error('Error creating listing:', catchError);
-    return res.status(500).json({ error: 'An error occurred while creating listing' });
+    return res
+      .status(500)
+      .json({ error: 'An error occurred while creating listing' });
   }
 });
 
