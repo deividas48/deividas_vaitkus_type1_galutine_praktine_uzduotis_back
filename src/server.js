@@ -7,6 +7,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import multer from 'multer'; // Import multer
 import path from 'path'; // Import path for directory handling
+import { fileURLToPath } from 'url';
 import listingsRouter from './routes/listing/listingRoutes.js';
 import listingsRouterByUser from './routes/listing/listingRoutesByUser.js';
 import listingsRouterFormAndFiles from './routes/listing/listingRoutesFormAndFiles.js';
@@ -20,6 +21,15 @@ import testConnection from './helper/msqlTestRouter.js';
 const app = express(); // Create an Express application instance
 const port = PORT || 5000; // Define the port number the server will listen on
 
+// /* Ability to display images from front-end
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+// Serve static files (images) from the 'uploads' directory
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
+// */ Ability to display images from front-end
+
 // testuoti msqlTestRouter.js
 testConnection();
 
@@ -28,6 +38,8 @@ app.use(cors()); // Enable CORS for all requests, allowing access from different
 app.use(morgan('dev')); // Log all requests to the console.
 // Leidžia serveriui priimti JSON tipo duomenis, o taliau juos persiųsti į req.body objektą.
 app.use(express.json()); // Parse JSON-encoded bodies
+
+// /* Ability to import files (images) from front-end
 
 // Set up multer for file uploads
 const storage = multer.diskStorage({
@@ -40,6 +52,8 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage }); // Create the multer instance
+
+// */ Ability to import files (images) from front-end
 
 // Routes
 app.use('/api/listings', listingsRouter); // Use the general listings routes
