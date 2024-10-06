@@ -20,7 +20,7 @@ const __dirname = path.dirname(__filename); // log ≈ '/Users/.../Documents/...
 // __dirname logs the directory path where listingRoutesFormAndFiles.js is located
 
 // Define the absolute path for the files (images) upload directory
-const uploadDir = path.resolve(__dirname, '../../uploads/images/sell'); // log ≈ '/Users/.../Documents/.../uploads/images/sell'
+const uploadDir = path.resolve(__dirname, '../../../uploads/images/sell'); // log ≈ '/Users/.../Documents/.../uploads/images/sell'
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
