@@ -5,8 +5,12 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
+    "start": "nodemon src/server.js",
+    "node": "node src/server.js",
+    "dev": "set NODE_ENV=production&& nodemon src/server.js",
+    "prod": "set NODE_ENV=production&& nodemon src/server.js",
+    "devMac": "NODE_ENV=development nodemon src/server.js",
+    "prodMac": "NODE_ENV=production nodemon src/server.js",
     "lint": "eslint src --fix"
   },
   "keywords": [],

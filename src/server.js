@@ -21,6 +21,32 @@ import testConnection from './helper/msqlTestRouter.js';
 const app = express(); // Create an Express application instance
 const port = PORT || 5000; // Define the port number the server will listen on
 
+// testuoti msqlTestRouter.js
+testConnection();
+
+// Environment-based CORS configuration
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? ['https://www.teikas.lt']
+  : ['http://localhost:3000']; // Localhost for development
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+  }),
+);
+
+// Middleware
+// app.use(cors()); // Enable CORS for all requests, allowing access from different domains.
+app.use(morgan('dev')); // Log all requests to the console.
+// Leidžia serveriui priimti JSON tipo duomenis, o taliau juos persiųsti į req.body objektą.
+app.use(express.json()); // Parse JSON-encoded bodies
+
 // /* Ability to display images from front-end
 
 const __filename = fileURLToPath(import.meta.url);
@@ -29,15 +55,6 @@ const __dirname = path.dirname(__filename);
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // */ Ability to display images from front-end
-
-// testuoti msqlTestRouter.js
-testConnection();
-
-// Middleware
-app.use(cors()); // Enable CORS for all requests, allowing access from different domains.
-app.use(morgan('dev')); // Log all requests to the console.
-// Leidžia serveriui priimti JSON tipo duomenis, o taliau juos persiųsti į req.body objektą.
-app.use(express.json()); // Parse JSON-encoded bodies
 
 // /* Ability to import files (images) from front-end
 
@@ -83,4 +100,5 @@ app.use((req, res) => {
 // Server Initialization
 app.listen(PORT, () => {
   console.log(`Server listening at http://localhost:${port}`);
+  console.log(`Enviroment: ${process.env.NODE_ENV}`);
 });
