@@ -18,6 +18,9 @@ import authRouter from './routes/authRoutes/authRoutes.js';
 import { PORT } from './config.js';
 import testConnection from './helper/msqlTestRouter.js';
 
+// Set default environment to production if NODE_ENV is not set
+process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+
 const app = express(); // Create an Express application instance
 const port = PORT || 5000; // Define the port number the server will listen on
 
