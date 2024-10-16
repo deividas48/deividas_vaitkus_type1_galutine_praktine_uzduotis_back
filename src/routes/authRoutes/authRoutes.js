@@ -6,10 +6,7 @@ import bcrypt from 'bcrypt';
 // who they say they are. It helps in making sure the right person is accessing the
 // right things on a website or app.
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 import dbQueryWithData from '../../helper/helper.js';
-
-dotenv.config(); // Load environment variables
 
 const authRouter = express.Router();
 const usersColumns = 'id, name, email, password, avatar_url';

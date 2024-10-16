@@ -8,6 +8,7 @@ import morgan from 'morgan';
 import multer from 'multer'; // Import multer
 import path from 'path'; // Import path for directory handling
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
 import listingsRouter from './routes/listing/listingRoutes.js';
 import listingsRouterByUser from './routes/listing/listingRoutesByUser.js';
 import listingsRouterFormAndFiles from './routes/listing/listingRoutesFormAndFiles.js';
@@ -17,6 +18,8 @@ import userRouter from './routes/userRoutes/userRoutes.js';
 import authRouter from './routes/authRoutes/authRoutes.js';
 import { PORT } from './config.js';
 import testConnection from './helper/msqlTestRouter.js';
+
+dotenv.config({ path: `.env.${process.env.NODE_ENV}` }); // Loads .env.production when NODE_ENV=production
 
 // Set default environment to production if NODE_ENV is not set
 process.env.NODE_ENV = process.env.NODE_ENV || 'production';
