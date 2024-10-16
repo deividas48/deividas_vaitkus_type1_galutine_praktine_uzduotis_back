@@ -7,3 +7,5 @@
 3. `yarn add express`
 
 4. `npm init @eslint/config`
+
+5. 'yarn add pm2'
