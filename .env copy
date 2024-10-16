@@ -1,7 +1,11 @@
-PORT=
+NODE_ENV=
+
+PORT=3000
 
 DB_USER=''
 DB_PASS=''
-DB_HOST=''
+DB_HOST='localhost'
 DB_DATABASE=''
 DB_PORT=''
+
+JWT_SECRET=
