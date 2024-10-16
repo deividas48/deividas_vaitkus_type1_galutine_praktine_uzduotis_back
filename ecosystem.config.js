@@ -2,6 +2,7 @@
 // The ecosystem.config.js file for PM2 helps manage environment variables by
 // specifying which environment settings to use when running your application
 //  Instead, it sets environment variables, such as NODE_ENV=production
+// pm2 starts ecosystem.config.js
 
 module.exports = {
   apps: [
