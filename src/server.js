@@ -33,7 +33,10 @@ testConnection();
 // Environment-based CORS configuration
 const allowedOrigins = process.env.NODE_ENV === 'production'
   ? ['https://www.teikas.lt']
-  : ['http://localhost:3000']; // Localhost for development
+  : [
+    'http://localhost:5173', // Vite typically runs on port 5173 by default
+  ]; // Localhost for development
+//
 
 app.use(
   cors({
