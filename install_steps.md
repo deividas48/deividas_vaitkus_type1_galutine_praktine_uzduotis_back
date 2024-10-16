@@ -8,4 +8,4 @@
 
 4. `npm init @eslint/config`
 
-5. 'yarn add pm2'
+5. `yarn add pm2`
