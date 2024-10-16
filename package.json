@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "nodemon src/server.js",
+    "start2": "pm2 start ecosystem.config.js --env production",
     "node": "node src/server.js",
     "dev": "set NODE_ENV=production&& nodemon src/server.js",
     "prod": "set NODE_ENV=production&& nodemon src/server.js",
