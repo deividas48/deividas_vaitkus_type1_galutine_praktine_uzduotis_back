@@ -6,13 +6,16 @@
   "type": "module",
   "scripts": {
     "start": "nodemon src/server.js",
-    "prod": "pm2 start ecosystem.config.js --env production",
+    "prod": "pm2 start ecosystem.config.cjs --env production",
     "node": "node src/server.js",
     "dev": "cross-env NODE_ENV=development nodemon src/server.js",
     "prodNodemon": "cross-env NODE_ENV=production nodemon src/server.js",
     "devMac": "NODE_ENV=development nodemon src/server.js",
     "prodMac": "NODE_ENV=production nodemon src/server.js",
-    "lint": "eslint src --fix"
+    "lint": "eslint src --fix",
+    "prod?": "yarn pm2 list",
+    "prod2": "yarn pm2 stop teikas-backend-api && pm2 start ecosystem.config.cjs --env production && pm2 logs teikas-backend-api",
+    "prodf": "pm2 flush"
   },
   "keywords": [],
   "author": "D.V.",
