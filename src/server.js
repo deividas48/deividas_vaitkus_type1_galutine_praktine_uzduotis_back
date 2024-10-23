@@ -21,6 +21,9 @@ import testConnection from './helper/msqlTestRouter.js';
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` }); // Loads .env.production when NODE_ENV=production
 
+// Check if environment variables are loaded correctly
+// console.log('check', process.env);
+
 // Set default environment to production if NODE_ENV is not set
 process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 
@@ -32,11 +35,13 @@ testConnection();
 
 // Environment-based CORS configuration
 const allowedOrigins = process.env.NODE_ENV === 'production'
-  ? ['https://www.teikas.lt']
-  : [
-    'http://localhost:5173', // Vite typically runs on port 5173 by default
+  ? ['https://www.teikas.lt'] // Production. Frontend domain
+  // eslint-disable-next-line operator-linebreak
+  : // ? ['http://localhost:5173'] // Testing. Fake production for testing in development enviroment
+  [
+    'http://localhost:5173', // Development. Vite development server. Vite - "fake server".
+    // Vite typically runs on port 5173 by default
   ]; // Localhost for development
-//
 
 app.use(
   cors({
@@ -47,6 +52,7 @@ app.use(
         callback(new Error('Not allowed by CORS'));
       }
     },
+    credentials: true, // This will allow cookies or authentication headers
   }),
 );
 
@@ -80,6 +86,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage }); // Create the multer instance
 
 // */ Ability to import files (images) from front-end
+
+// console.log('listingsRouter:', listingsRouter);
+// console.log('townsRouter:', townsRouter);
 
 // Routes
 app.use('/api/listings', listingsRouter); // Use the general listings routes
