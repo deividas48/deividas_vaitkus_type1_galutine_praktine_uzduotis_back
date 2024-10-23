@@ -14,6 +14,7 @@
     "prodMac": "NODE_ENV=production nodemon src/server.js",
     "lint": "eslint src --fix",
     "prod?": "yarn pm2 list",
+    "prodst": "yarn pm2 stop teikas-backend-api",
     "prod2": "yarn pm2 stop teikas-backend-api && pm2 start ecosystem.config.cjs --env production && pm2 logs teikas-backend-api",
     "prodf": "pm2 flush"
   },
