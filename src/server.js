@@ -19,7 +19,7 @@ import authRouter from './routes/authRoutes/authRoutes.js';
 import { PORT } from './config.js';
 import testConnection from './helper/msqlTestRouter.js';
 
-dotenv.config({ path: `.env.${process.env.NODE_ENV}` }); // Loads .env.production when NODE_ENV=production
+dotenv.config({ path: `.env.${process.env.NODE_ENV}` }); // Loads .env.production file when NODE_ENV=production
 
 // Check if environment variables are loaded correctly
 // console.log('check', process.env);
