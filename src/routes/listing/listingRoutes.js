@@ -1,10 +1,10 @@
 // src/routes/listing/listingRoutes.js
 
 import express from 'express';
-import multer from 'multer'; // Handles file uploads.
+// import multer from 'multer'; // Handles file uploads.
 // import fs from 'fs'; // fs: Interacts with the file system (e.g., checking if folders exist).
-import path from 'path'; // path and fileURLToPath: Helps resolve file paths correctly.
-import { fileURLToPath } from 'url'; // Also helps resolve file paths correctly.
+// import path from 'path'; // path and fileURLToPath: Helps resolve file paths correctly.
+// import { fileURLToPath } from 'url'; // Also helps resolve file paths correctly.
 import dbQueryWithData from '../../helper/helper.js';
 
 const listingsRouter = express.Router();
